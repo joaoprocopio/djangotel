@@ -7,30 +7,20 @@ services:
       POSTGRES_PASSWORD: "postgres"
     ports:
       - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
-      interval: "10s"
-      timeout: "5s"
-      retries: "5"
     volumes:
-      - "postgres_data:/postgres:/var/lib/postgresql"
+      - "postgres_data:/var/lib/postgresql"
 
   otelcol:
-    image: "otel/opentelemetry-collector-contrib:latest"
+    image: "otel/opentelemetry-collector-contrib:0.148.0"
     ports:
       - "13133:13133"
       - "4318:4318"
       - "4317:4317"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:13133"]
-      interval: "10s"
-      timeout: "5s"
-      retries: "3"
     volumes:
       - "./docker/otel/config.yaml:/etc/otelcol-contrib/config.yaml"
 
   grafana:
-    image: grafana/grafana:latest
+    image: "grafana/grafana:main"
     ports:
       - "7141:3000"
     volumes:
