@@ -3,7 +3,7 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from .schemas import Csv
+from djangotel.schemas import Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
