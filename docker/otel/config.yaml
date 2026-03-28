@@ -23,11 +23,13 @@ service:
         - "otlp"
       exporters:
         - "debug"
+
     metrics:
       receivers:
         - "otlp"
       exporters:
         - "debug"
+
     logs:
       receivers:
         - "otlp"

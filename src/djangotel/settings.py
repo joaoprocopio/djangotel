@@ -8,9 +8,9 @@ from djangotel.schemas import Csv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-DEPLOYMENT = os.getenv("DJANGO_DEPLOYMENT", default="2f92ca37")
+DEPLOYMENT_ID = os.getenv("DJANGO_DEPLOYMENT_ID", default="2f92ca37")
 
-ENVIRONMENT = os.getenv("DJANGO_ENVIRONMENT", default="dev")
+DEPLOYMENT_ENVIRONMENT = os.getenv("DJANGO_DEPLOYMENT_ENVIRONMENT", default="dev")
 
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
@@ -123,5 +123,5 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-OTEL_HTTP_ENDPOINT = os.getenv("DJANGO_OTEL_HTTP_ENDPOINT", default="localhost:4318")
 OTEL_GRPC_ENDPOINT = os.getenv("DJANGO_OTEL_GRPC_ENDPOINT", default="localhost:4317")
+OTEL_HTTP_ENDPOINT = os.getenv("DJANGO_OTEL_HTTP_ENDPOINT", default="localhost:4318")
