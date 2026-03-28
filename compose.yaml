@@ -75,7 +75,9 @@ services:
     image: "grafana/grafana:main"
     environment:
       GF_INSTALL_PLUGINS: "grafana-clickhouse-datasource"
-      GRAFANA_CLICKHOUSE_URL: "http://clickhouse:8123"
+      GRAFANA_CLICKHOUSE_HOST: "clickhouse"
+      GRAFANA_CLICKHOUSE_PORT: "9000"
+      GRAFANA_CLICKHOUSE_PROTOCOL: "native"
       GRAFANA_CLICKHOUSE_DB: "clickhouse"
       GRAFANA_CLICKHOUSE_USER: "clickhouse"
       GRAFANA_CLICKHOUSE_PASSWORD: "clickhouse"
