@@ -122,3 +122,6 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+
+OTEL_HTTP_ENDPOINT = os.getenv("DJANGO_OTEL_HTTP_ENDPOINT", default="localhost:4318")
+OTEL_GRPC_ENDPOINT = os.getenv("DJANGO_OTEL_GRPC_ENDPOINT", default="localhost:4317")

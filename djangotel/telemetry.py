@@ -1,14 +1,15 @@
 import logging
 
 from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.django import DjangoInstrumentor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.semconv._incubating.attributes import deployment_attributes
 from opentelemetry.semconv.attributes import service_attributes
 
-from djangotel.settings import DEPLOYMENT, ENVIRONMENT
+from djangotel.settings import DEPLOYMENT, ENVIRONMENT, OTEL_GRPC_ENDPOINT
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,9 @@ def setup():
     )
 
     tracer_provider = TracerProvider(resource=resource)
-    tracer_processor = BatchSpanProcessor(ConsoleSpanExporter())
+    tracer_processor = BatchSpanProcessor(
+        OTLPSpanExporter(endpoint=OTEL_GRPC_ENDPOINT, insecure=True)
+    )
     tracer_provider.add_span_processor(tracer_processor)
 
     trace.set_tracer_provider(tracer_provider)
