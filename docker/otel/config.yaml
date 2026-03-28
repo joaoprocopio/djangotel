@@ -16,6 +16,7 @@ extensions:
 exporters:
   clickhouse:
     endpoint: ${CLICKHOUSE_ENDPOINT}
+    database: ${CLICKHOUSE_DATABASE}
     username: ${CLICKHOUSE_USERNAME}
     password: ${CLICKHOUSE_PASSWORD}
 

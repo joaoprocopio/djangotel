@@ -54,6 +54,7 @@ services:
       CLICKHOUSE_ENDPOINT: "tcp://clickhouse:9000"
       CLICKHOUSE_USERNAME: "clickhouse"
       CLICKHOUSE_PASSWORD: "clickhouse"
+      CLICKHOUSE_DATABASE: "clickhouse"
     ports:
       - name: Healthcheck
         published: 13133
