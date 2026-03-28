@@ -15,7 +15,9 @@ extensions:
 
 exporters:
   clickhouse:
-    endpoint: tcp://clickhouse:9000
+    endpoint: ${CLICKHOUSE_ENDPOINT}
+    username: ${CLICKHOUSE_USERNAME}
+    password: ${CLICKHOUSE_PASSWORD}
 
 service:
   extensions:

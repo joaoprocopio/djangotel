@@ -50,6 +50,10 @@ services:
 
   otelcol:
     image: "otel/opentelemetry-collector-contrib:0.148.0"
+    environment:
+      CLICKHOUSE_ENDPOINT: "tcp://clickhouse:9000"
+      CLICKHOUSE_USERNAME: "clickhouse"
+      CLICKHOUSE_PASSWORD: "clickhouse"
     ports:
       - name: Healthcheck
         published: 13133
