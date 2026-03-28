@@ -52,7 +52,6 @@ services:
     image: "otel/opentelemetry-collector-contrib:0.148.0"
     environment:
       OTELCOL_CLICKHOUSE_ENDPOINT: "tcp://clickhouse:9000"
-      OTELCOL_CLICKHOUSE_DB: "clickhouse"
       OTELCOL_CLICKHOUSE_USERNAME: "clickhouse"
       OTELCOL_CLICKHOUSE_PASSWORD: "clickhouse"
     ports:
@@ -78,7 +77,6 @@ services:
       GRAFANA_CLICKHOUSE_HOST: "clickhouse"
       GRAFANA_CLICKHOUSE_PORT: "9000"
       GRAFANA_CLICKHOUSE_PROTOCOL: "native"
-      GRAFANA_CLICKHOUSE_DB: "clickhouse"
       GRAFANA_CLICKHOUSE_USER: "clickhouse"
       GRAFANA_CLICKHOUSE_PASSWORD: "clickhouse"
     ports:
