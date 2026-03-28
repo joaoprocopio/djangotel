@@ -73,6 +73,8 @@ services:
 
   grafana:
     image: "grafana/grafana:main"
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clickhouse-datasource"
     ports:
       - name: UI
         published: 7141
