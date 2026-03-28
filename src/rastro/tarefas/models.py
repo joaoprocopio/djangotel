@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+from .infrastructure.models import TaskModel, SoftDeleteManager
+
+__all__ = ["TaskModel", "SoftDeleteManager"]

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ContaConfig(AppConfig):
+class TarefasConfig(AppConfig):
     name = "rastro.tarefas"
