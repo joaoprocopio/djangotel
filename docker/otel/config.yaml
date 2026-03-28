@@ -15,14 +15,17 @@ extensions:
 
 exporters:
   clickhouse:
-    endpoint: ${CLICKHOUSE_ENDPOINT}
-    database: ${CLICKHOUSE_DATABASE}
-    username: ${CLICKHOUSE_USERNAME}
-    password: ${CLICKHOUSE_PASSWORD}
+    endpoint: "${CLICKHOUSE_ENDPOINT}"
+    database: "${CLICKHOUSE_DATABASE}"
+    username: "${CLICKHOUSE_USERNAME}"
+    password: "${CLICKHOUSE_PASSWORD}"
+  debug:
+    verbosity: "normal"
 
 service:
   extensions:
     - "health_check"
+
   pipelines:
     traces:
       receivers:
@@ -31,15 +34,18 @@ service:
         - "batch"
       exporters:
         - "clickhouse"
+        - "debug"
 
     # metrics:
     #   receivers:
     #     - "otlp"
     #   exporters:
     #     - "clickhouse"
+    #     - "debug"
 
     # logs:
     #   receivers:
     #     - "otlp"
     #   exporters:
     #     - "clickhouse"
+    #     - "debug"
