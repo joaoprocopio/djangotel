@@ -33,8 +33,8 @@ DJANGO_APPS = [
 ]
 
 LOCAL_APPS = [
-    "users",
-    "tasks",
+    "djangotel.users",
+    "djangotel.tasks",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
