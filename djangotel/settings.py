@@ -8,6 +8,10 @@ from djangotel.schemas import Csv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+DEPLOYMENT = os.getenv("DJANGO_DEPLOYMENT", default="2f92ca37")
+
+ENVIRONMENT = os.getenv("DJANGO_ENVIRONMENT", default="dev")
+
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     default="i-nh1u%jl!9-f=-kws-k4&z=0z%49e_%m!7dwf=u(c9-wqh)b^",

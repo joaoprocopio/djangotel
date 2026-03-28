@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "django>=6.0.3",
+    "opentelemetry-instrumentation-django>=0.61b0",
+    "opentelemetry-sdk>=1.40.0",
     "psycopg2>=2.9.11",
     "pydantic>=2.12.5",
 ]
