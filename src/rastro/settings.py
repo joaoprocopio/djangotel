@@ -8,19 +8,23 @@ from rastro.schemas import Csv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-DEPLOYMENT_ID = os.getenv("DJANGO_DEPLOYMENT_ID", default="2f92ca37")
+DEPLOYMENT_ID = os.getenv("RASTRO_DJANGO_DEPLOYMENT_ID", default="2f92ca37")
 
-DEPLOYMENT_ENVIRONMENT = os.getenv("DJANGO_DEPLOYMENT_ENVIRONMENT", default="dev")
+DEPLOYMENT_ENVIRONMENT = os.getenv(
+    "RASTRO_DJANGO_DEPLOYMENT_ENVIRONMENT", default="dev"
+)
 
 SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
+    "RASTRO_DJANGO_SECRET_KEY",
     default="i-nh1u%jl!9-f=-kws-k4&z=0z%49e_%m!7dwf=u(c9-wqh)b^",
 )
 
-DEBUG = TypeAdapter(bool).validate_strings(os.getenv("DJANGO_DEBUG", default="true"))
+DEBUG = TypeAdapter(bool).validate_strings(
+    os.getenv("RASTRO_DJANGO_DEBUG", default="true")
+)
 
 ALLOWED_HOSTS = TypeAdapter(Csv).validate_strings(
-    os.getenv("DJANGO_ALLOWED_HOSTS", default="localhost, 127.0.0.1, [::1]")
+    os.getenv("RASTRO_DJANGO_ALLOWED_HOSTS", default="localhost, 127.0.0.1, [::1]")
 )
 
 DJANGO_APPS = [
@@ -73,23 +77,23 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.getenv(
-            "DJANGO_POSTGRES_DB",
+            "RASTRO_DJANGO_POSTGRES_DB",
             default="postgres",
         ),
         "USER": os.getenv(
-            "DJANGO_POSTGRES_USER",
+            "RASTRO_DJANGO_POSTGRES_USER",
             default="postgres",
         ),
         "PASSWORD": os.getenv(
-            "DJANGO_POSTGRES_PASSWORD",
+            "RASTRO_DJANGO_POSTGRES_PASSWORD",
             default="postgres",
         ),
         "HOST": os.getenv(
-            "DJANGO_POSTGRES_HOST",
+            "RASTRO_DJANGO_POSTGRES_HOST",
             default="localhost",
         ),
         "PORT": os.getenv(
-            "DJANGO_POSTGRES_PORT",
+            "RASTRO_DJANGO_POSTGRES_PORT",
             default="5432",
         ),
     }
@@ -123,5 +127,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-OTEL_GRPC_ENDPOINT = os.getenv("DJANGO_OTEL_GRPC_ENDPOINT", default="localhost:4317")
-OTEL_HTTP_ENDPOINT = os.getenv("DJANGO_OTEL_HTTP_ENDPOINT", default="localhost:4318")
+OTEL_GRPC_ENDPOINT = os.getenv(
+    "RASTRO_DJANGO_OTEL_GRPC_ENDPOINT", default="localhost:4317"
+)
+OTEL_HTTP_ENDPOINT = os.getenv(
+    "RASTRO_DJANGO_OTEL_HTTP_ENDPOINT", default="localhost:4318"
+)
