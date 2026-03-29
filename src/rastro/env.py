@@ -4,7 +4,7 @@ from typing import Callable, TypeVar, overload
 T = TypeVar("T")
 
 
-def cast_env(value, *, caster: Callable[[str], T]) -> T:
+def cast_env(value: str, *, caster: Callable[[str], T]) -> T:
     return caster(value)
 
 
