@@ -9,6 +9,10 @@ django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SERVICE_NAME = get_env(
+    "RASTRO_DJANGO_SERVICE_NAME",
+    default="rastro",
+)
 
 DEPLOYMENT_ID = get_env(
     "RASTRO_DJANGO_DEPLOYMENT_ID",
@@ -50,12 +54,12 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-# LOCAL_APPS = [
-# "rastro.conta",
-# "rastro.tarefas",
-# ]
+LOCAL_APPS = [
+    "rastro.conta",
+    "rastro.tarefas",
+]
 
-INSTALLED_APPS = DJANGO_APPS  # + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
