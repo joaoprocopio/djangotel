@@ -44,11 +44,13 @@ def entity_to_dict(
         raise TypeError("entity must be a dataclass instance")
 
     for field in fields(entity):  # type: ignore[misc]
-        field_name = field.name  # type: ignore[misc]
+        field_name = field.name
         if field_name in exclude:
             continue
-        value = getattr(entity, field_name)  # type: ignore[misc]
-        result[field_name] = _unwrap_value(value)  # type: ignore[misc]
+        value = getattr(entity, field_name)
+        if field_name.startswith("_"):
+            continue
+        result[field_name] = _unwrap_value(value)
 
     return result
 
@@ -56,10 +58,12 @@ def entity_to_dict(
 def _unwrap_value(value: object) -> object:
     if isinstance(value, ValueObject):
         return value.value
-    if is_dataclass(value) and not isinstance(value, type):  # type: ignore[misc]
+    if is_dataclass(value) and not isinstance(value, type):
         return entity_to_dict(value)
     if isinstance(value, list):
         return [_unwrap_value(item) for item in value]
     if isinstance(value, dict):
-        return {k: _unwrap_value(v) for k, v in value.items()}  # type: ignore[misc]
+        return {k: _unwrap_value(v) for k, v in value.items()}
+    if value is None:
+        return None
     return value

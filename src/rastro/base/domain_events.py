@@ -1,17 +1,16 @@
 from abc import ABC
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import TypeVar
+from datetime import datetime, timezone
+from typing import Any
 from uuid import uuid4
-
-T = TypeVar("T")
 
 
 @dataclass(frozen=True, kw_only=True)
 class DomainEvent(ABC):
     event_id: str = field(default_factory=lambda: str(uuid4()))
-    occurred_at: datetime = field(default_factory=datetime.utcnow)
+    occurred_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     event_type: str = field(init=False)
+    payload: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "event_type", self.__class__.__name__)

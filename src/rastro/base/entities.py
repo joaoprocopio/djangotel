@@ -23,8 +23,11 @@ class Entity(ABC, Generic[ID]):
 
         return self.id == other_entity.id
 
+    def __hash__(self) -> int:
+        return hash(self.id)
+
 
 class Id(ValueObject[int]):
     def validate(self) -> None:
-        if not self.value >= 1:
+        if self.value < 1:
             raise InvalidIdError()

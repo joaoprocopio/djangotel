@@ -23,3 +23,15 @@ class UsernameAlreadyExistsError(BaseError):
 
 class AuthenticationError(BaseError):
     code = "USERS_AUTHENTICATION_FAILED"
+
+
+class UserNotFoundError(BaseError):
+    code = "USERS_USER_NOT_FOUND"
+
+
+class InvalidTokenError(BaseError):
+    code = "USERS_INVALID_TOKEN"
+
+
+class EmailNotVerifiedError(BaseError):
+    code = "USERS_EMAIL_NOT_VERIFIED"

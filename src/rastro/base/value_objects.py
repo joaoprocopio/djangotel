@@ -16,3 +16,11 @@ class ValueObject(ABC, Generic[T]):
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self.value!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return self.value == other.value
+
+    def __hash__(self) -> int:
+        return hash(self.value)

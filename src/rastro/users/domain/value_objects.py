@@ -1,7 +1,8 @@
 import re
 
+from rastro.base.parsers import is_valid_email
 from rastro.base.value_objects import ValueObject
-from rastro.users.errors import (
+from rastro.users.domain.errors import (
     InvalidEmailError,
     InvalidPasswordError,
     InvalidUsernameError,
@@ -12,10 +13,7 @@ class Email(ValueObject[str]):
     def validate(self) -> None:
         if not self.value:
             raise InvalidEmailError("Email cannot be empty")
-        if "@" not in self.value:
-            raise InvalidEmailError(f"Invalid email format: {self.value}")
-        local, _, domain = self.value.partition("@")
-        if not local or not domain:
+        if not is_valid_email(self.value):
             raise InvalidEmailError(f"Invalid email format: {self.value}")
 
 
@@ -43,3 +41,9 @@ class Password(ValueObject[str]):
             raise InvalidPasswordError(
                 f"Password must be at least {self.MIN_LENGTH} characters"
             )
+
+
+class HashedPassword(ValueObject[str]):
+    def validate(self) -> None:
+        if not self.value:
+            raise InvalidPasswordError("Hashed password cannot be empty")
