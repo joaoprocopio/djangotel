@@ -10,7 +10,8 @@ from rastro_base.value_object import ValueObject
 
 
 class Email(ValueObject[str]):
-    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    # https://emailregex.com/
+    EMAIL_PATTERN = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
     def normalize(self) -> str:
         return self.value.strip().lower()
