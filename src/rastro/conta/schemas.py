@@ -26,12 +26,3 @@ class ContaOutput:
     email: Email
     first_name: Name
     last_name: Name
-
-    def __dict__(self) -> dict:
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-        }
