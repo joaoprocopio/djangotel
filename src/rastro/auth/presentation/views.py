@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
 
 from rastro.auth.application.dtos import (
@@ -25,6 +25,7 @@ from rastro.auth.presentation.presenters import UserPresenter
 
 
 @require_GET  # type: ignore
+@ensure_csrf_cookie  # type: ignore
 def me(request: HttpRequest) -> HttpResponse:
     session_service = DjangoSessionService(request)
 
@@ -73,6 +74,11 @@ def sign_up(request: HttpRequest) -> JsonResponse:
 @require_POST  # type: ignore
 def sign_out(request: HttpRequest) -> HttpResponse:
     session_service = DjangoSessionService(request)
+
+    user = session_service.logged_user()
+
+    if user is None:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
     session_service.logout()
 

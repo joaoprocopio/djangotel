@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user, login, logout
+from django.contrib import auth
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpRequest
 
@@ -19,13 +19,13 @@ class DjangoSessionService(SessionService):
         self.request = request
 
     def login(self, user: User) -> None:
-        login(self.request, DomainToDjangoUserMapper.map(user))
+        auth.login(self.request, DomainToDjangoUserMapper.map(user))
 
     def logout(self) -> None:
-        logout(self.request)
+        auth.logout(self.request)
 
     def logged_user(self) -> User | None:
-        user = get_user(self.request)
+        user = auth.get_user(self.request)
 
         if user.pk is None:
             return None
