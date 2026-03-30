@@ -40,4 +40,4 @@ class BaseError(Exception):
 
 
 class InvalidIdError(BaseError):
-    code = "INVALID_ID"
+    code = "BASE_INVALID_ID"
