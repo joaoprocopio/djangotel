@@ -21,7 +21,7 @@ from rastro.auth.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
 )
-from rastro.auth.interfaces.presenters import UserPresenter
+from rastro.auth.presentation.presenters import UserPresenter
 
 
 @require_GET  # type: ignore

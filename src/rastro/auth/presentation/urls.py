@@ -1,6 +1,6 @@
 from django.urls import path
 
-from rastro.auth.interfaces import views
+from rastro.auth.presentation import views
 
 urlpatterns = [
     path("me", views.me, name="me"),

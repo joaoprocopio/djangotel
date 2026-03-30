@@ -11,3 +11,7 @@ class UserNotFoundError(BaseError):
 
 class InvalidPasswordError(BaseError):
     code = "AUTH_INVALID_PASSWORD_ERROR"
+
+
+class InvalidUsernameError(BaseError):
+    code = "AUTH_INVALID_USERNAME_ERROR"
