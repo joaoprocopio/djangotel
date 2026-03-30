@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from rastro.base.entity import Id
 from rastro.base.use_case import UseCase
 from rastro.users.application.dtos import (
@@ -30,6 +28,7 @@ from rastro.users.domain.services import (
     TokenService,
 )
 from rastro.users.domain.value_objects import Email, RawPassword, Username
+from rastro.users.infrastructure.mappers import DomainUserToOutputMapper
 
 
 class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
@@ -123,6 +122,7 @@ class RequestPasswordResetUseCase(UseCase[str, str]):
     def execute(self, input: str) -> str:
         email = input
         user = self._repository.get_by_email(Email(email))
+
         if user is None:
             raise UserNotFoundError(f"User with email {email} not found")
 
@@ -167,13 +167,7 @@ class ResetPasswordUseCase(UseCase[ResetPasswordInput, UserOutput]):
 
         saved_user = self._repository.update(user)
 
-        return UserOutput(
-            id=saved_user.id.value,
-            email=saved_user.email.value,
-            username=saved_user.username.value,
-            is_active=saved_user.is_active,
-            is_verified=saved_user.is_verified,
-        )
+        return DomainUserToOutputMapper.map(saved_user)
 
 
 class VerifyEmailUseCase(UseCase[VerifyEmailInput, UserOutput]):
@@ -199,13 +193,7 @@ class VerifyEmailUseCase(UseCase[VerifyEmailInput, UserOutput]):
 
         saved_user = self._repository.update(user)
 
-        return UserOutput(
-            id=saved_user.id.value,
-            email=saved_user.email.value,
-            username=saved_user.username.value,
-            is_active=saved_user.is_active,
-            is_verified=saved_user.is_verified,
-        )
+        return DomainUserToOutputMapper.map(saved_user)
 
 
 class GetUserUseCase(UseCase[GetUserInput, UserOutput]):
@@ -218,10 +206,4 @@ class GetUserUseCase(UseCase[GetUserInput, UserOutput]):
         if user is None:
             raise UserNotFoundError(f"User with id {input.user_id} not found")
 
-        return UserOutput(
-            id=user.id.value,
-            email=user.email.value,
-            username=user.username.value,
-            is_active=user.is_active,
-            is_verified=user.is_verified,
-        )
+        return DomainUserToOutputMapper.map(user)

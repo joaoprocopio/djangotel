@@ -4,13 +4,13 @@ from django.contrib.auth.models import User as DjangoUser
 from django.http import HttpRequest
 
 from rastro.base.entity import Id
+from rastro.users.domain.aggregates import User
 from rastro.users.domain.services import (
     EmailService,
     PasswordHashingService,
     SessionService,
     TokenService,
 )
-from rastro.users.domain.user import User
 from rastro.users.domain.value_objects import HashedPassword, RawPassword
 
 

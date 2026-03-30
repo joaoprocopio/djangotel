@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 from rastro.base.domain_service import DomainService
 from rastro.base.entity import Id
-from rastro.users.domain.user import User
+from rastro.users.domain.aggregates import User
 from rastro.users.domain.value_objects import HashedPassword, RawPassword
 
 

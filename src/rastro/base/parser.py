@@ -1,7 +1,4 @@
 import re
-from typing import TypeVar
-
-T = TypeVar("T")
 
 
 def parse_csv(value: str | list[str]) -> list[str]:
