@@ -13,24 +13,20 @@ class SignUpInput(DTO, FromStr):
     password: str
 
     @classmethod
-    def from_str(cls, bytes: str | bytes | bytearray) -> Self:
-        data = json.loads(value)
-        return cls(**{field.name: data[field.name] for field in fields(cls)})
+    def from_str(cls, value: str | bytes | bytearray) -> Self:
+        data = json.loads(value)  # type: ignore[misc]
+        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
 
 
 @dataclass(frozen=True)
-class SignInInput(DTO):
+class SignInInput(DTO, FromStr):
     query: str
     password: str
 
-
-@dataclass(frozen=True)
-class UserOutput(DTO):
-    id: int
-    email: str
-    username: str
-    is_active: bool
-    is_verified: bool
+    @classmethod
+    def from_str(cls, value: str | bytes | bytearray) -> Self:
+        data = json.loads(value)  # type: ignore[misc]
+        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
 
 
 @dataclass(frozen=True)
@@ -59,3 +55,12 @@ class VerifyEmailInput(DTO):
 @dataclass(frozen=True)
 class GetUserInput(DTO):
     user_id: int
+
+
+@dataclass(frozen=True)
+class UserOutput(DTO):
+    id: int
+    email: str
+    username: str
+    is_active: bool
+    is_verified: bool

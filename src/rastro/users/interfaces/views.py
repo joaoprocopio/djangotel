@@ -2,6 +2,7 @@ import json
 from http import HTTPStatus
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 
 from rastro.base.entity import Id
@@ -45,20 +46,22 @@ verify_email_use_case = VerifyEmailUseCase(repository, token_service)
 
 
 @require_POST  # type: ignore[misc]
+@csrf_exempt  # type: ignore[misc]
 def sign_up(request: HttpRequest) -> JsonResponse:
     input = SignUpInput.from_str(request.body)
     output = sign_up_use_case.execute(input)
+
     return JsonResponse(UserPresenter.present(output), status=HTTPStatus.CREATED)
 
 
 @require_POST  # type: ignore[misc]
+@csrf_exempt  # type: ignore[misc]
 def sign_in(request: HttpRequest) -> JsonResponse:
-    data = json.loads(request.body)  # type: ignore[misc]
-    query: str = data["query"]  # type: ignore[misc]
-    password: str = data["password"]  # type: ignore[misc]
-    input_dto = SignInInput(query=query, password=password)
-    output: UserOutput = sign_in_use_case.execute(input_dto)
+    input = SignInInput.from_str(request.body)
+    output = sign_in_use_case.execute(input)
+
     session_service.login(request, Id(output.id))
+
     return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
 
 
@@ -68,7 +71,7 @@ def sign_out(request: HttpRequest) -> HttpResponse:
 
 
 @require_GET  # type: ignore[misc]
-def current_user(request: HttpRequest) -> JsonResponse:
+def me(request: HttpRequest) -> JsonResponse:
     user_id = session_service.get_current_user_id(request)
     if user_id is None:
         return JsonResponse({}, status=HTTPStatus.UNAUTHORIZED)  # type: ignore[misc]
