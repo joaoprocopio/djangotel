@@ -7,9 +7,10 @@ from django.views.decorators.http import require_GET
 
 @require_GET  # type: ignore[misc]
 def conta(request: WSGIRequest) -> HttpResponse:
-    return HttpResponse(status=HTTPStatus.IM_A_TEAPOT)
-    # if not request.user.is_authenticated:  # type: ignore[union-attr]
-    #     return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+
+    return HttpResponse()
 
     # try:
     #     use_case = get_get_user_usecase()
