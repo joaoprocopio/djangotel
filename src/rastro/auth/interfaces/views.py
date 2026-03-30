@@ -16,7 +16,7 @@ from rastro.auth.infrastructure.mappers import (
     DomainToOutputUserMapper,
     OutputToDomainUserMapper,
 )
-from rastro.auth.infrastructure.repository import DjangoUserRepository
+from rastro.auth.infrastructure.repositories import DjangoUserRepository
 from rastro.auth.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
