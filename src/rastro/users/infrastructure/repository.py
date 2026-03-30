@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User as DjangoUser
+from django.contrib.auth import get_user_model
 
 from rastro.base.entity import Id
 from rastro.users.domain.entities import User
@@ -10,12 +10,14 @@ from rastro.users.domain.value_objects import (
 )
 from rastro.users.infrastructure.mappers import DjangoToDomainUserMapper
 
+DjangoUser = get_user_model()
+
 
 class DjangoUserRepository(UserRepository):
     def create(
         self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> User:
-        django_user = DjangoUser.objects.create(  # type: ignore
+        django_user = DjangoUser.objects.create(
             username=username.value,
             email=email.value,
             password=hashed_password.value,
@@ -26,7 +28,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_id(self, id: Id) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(pk=id.value)  # type: ignore
+            django_user = DjangoUser.objects.get(pk=id.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -34,7 +36,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_email(self, email: Email) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(email=email.value)  # type: ignore
+            django_user = DjangoUser.objects.get(email=email.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -42,7 +44,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_username(self, username: Username) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(username=username.value)  # type: ignore
+            django_user = DjangoUser.objects.get(username=username.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:

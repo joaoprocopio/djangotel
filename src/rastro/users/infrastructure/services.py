@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import get_user, login, logout
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import HttpRequest
 
@@ -25,10 +25,12 @@ class DjangoSessionService(SessionService):
         logout(self.request)
 
     def logged_user(self) -> User | None:
-        if self.request.user.pk is None:
+        user = get_user(self.request)
+
+        if user.pk is None:
             return None
 
-        return DjangoToDomainUserMapper.map(self.request.user)
+        return DjangoToDomainUserMapper.map(user)
 
 
 class DjangoPasswordHashingService(PasswordHashingService):
