@@ -1,21 +1,23 @@
 from dataclasses import dataclass
 
+from rastro.base.dto import DTO
+
 
 @dataclass(frozen=True)
-class SignUpInput:
+class SignUpInput(DTO):
     username: str
     email: str
     password: str
 
 
 @dataclass(frozen=True)
-class SignInInput:
+class SignInInput(DTO):
     query: str
     password: str
 
 
 @dataclass(frozen=True)
-class UserOutput:
+class UserOutput(DTO):
     id: int
     email: str
     username: str
@@ -24,28 +26,28 @@ class UserOutput:
 
 
 @dataclass(frozen=True)
-class RequestPasswordResetInput:
+class RequestPasswordResetInput(DTO):
     email: str
 
 
 @dataclass(frozen=True)
-class ResetPasswordInput:
+class ResetPasswordInput(DTO):
     user_id: int
     token: str
     new_password: str
 
 
 @dataclass(frozen=True)
-class RequestEmailVerificationInput:
+class RequestEmailVerificationInput(DTO):
     user_id: int
 
 
 @dataclass(frozen=True)
-class VerifyEmailInput:
+class VerifyEmailInput(DTO):
     user_id: int
     token: str
 
 
 @dataclass(frozen=True)
-class GetUserInput:
+class GetUserInput(DTO):
     user_id: int
