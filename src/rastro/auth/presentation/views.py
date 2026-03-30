@@ -60,9 +60,12 @@ def sign_up(request: HttpRequest) -> JsonResponse:
     repository = DjangoUserRepository()
     password_hashing_service = DjangoPasswordHashingService()
     sign_up_use_case = SignUpUseCase(repository, password_hashing_service)
+    session_service = DjangoSessionService(request)
 
     input = SignUpInput.parse_json(request.body)
     output = sign_up_use_case.execute(input)
+
+    session_service.login(OutputToDomainUserMapper.map(output))
 
     return JsonResponse(UserPresenter.present(output), status=HTTPStatus.CREATED)
 
