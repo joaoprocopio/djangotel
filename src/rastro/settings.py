@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import cast
 
 import django_stubs_ext
 
@@ -118,12 +117,8 @@ DATABASES = {
 CSRF_COOKIE_HTTPONLY = True
 
 
-PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.Argon2PasswordHasher",
-    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
-]
-AUTH_PASSWORD_VALIDATORS = cast(list[str], [])
+PASSWORD_HASHERS = ["django.contrib.auth.hashers.Argon2PasswordHasher"]
+AUTH_PASSWORD_VALIDATORS = []  # type: ignore
 
 
 LANGUAGE_CODE = "en-us"
