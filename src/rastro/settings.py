@@ -2,8 +2,7 @@ from pathlib import Path
 
 import django_stubs_ext
 
-from rastro.base.parser import parse_booleanish, parse_csv
-from rastro.env import cast_env, get_env
+from rastro.env import cast_env, get_env, parse_booleanish, parse_csv
 
 django_stubs_ext.monkeypatch()
 
@@ -34,7 +33,7 @@ DEBUG = cast_env(
         "RASTRO_DJANGO_DEBUG",
         default="1",
     ),
-    caster=parse_booleanish,
+    parser=parse_booleanish,
 )
 
 ALLOWED_HOSTS = cast_env(
@@ -42,7 +41,7 @@ ALLOWED_HOSTS = cast_env(
         "RASTRO_DJANGO_ALLOWED_HOSTS",
         default="localhost, 127.0.0.1, [::1]",
     ),
-    caster=parse_csv,
+    parser=parse_csv,
 )
 
 DJANGO_APPS = [

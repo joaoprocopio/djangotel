@@ -1,6 +1,5 @@
 import re
 
-from rastro.base.parser import is_valid_email
 from rastro.base.value_object import ValueObject
 from rastro.users.domain.errors import (
     InvalidEmailError,
@@ -10,10 +9,12 @@ from rastro.users.domain.errors import (
 
 
 class Email(ValueObject[str]):
+    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+
     def validate(self) -> None:
         if not self.value:
             raise InvalidEmailError("Email cannot be empty")
-        if not is_valid_email(self.value):
+        if not self.EMAIL_PATTERN.match(self.value):
             raise InvalidEmailError(f"Invalid email format: {self.value}")
 
 
