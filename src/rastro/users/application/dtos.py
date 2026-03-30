@@ -1,85 +1,47 @@
-import json
-from dataclasses import dataclass, fields
-from typing import Self
+from dataclasses import dataclass
 
 from rastro.base.dto import DTO
-from rastro.base.traits import FromStr
 
 
 @dataclass(frozen=True)
-class SignUpInput(DTO, FromStr):
+class SignUpInput(DTO):
     username: str
     email: str
     password: str
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class SignInInput(DTO, FromStr):
+class SignInInput(DTO):
     query: str
     password: str
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class RequestPasswordResetInput(DTO, FromStr):
+class RequestPasswordResetInput(DTO):
     email: str
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class ResetPasswordInput(DTO, FromStr):
+class ResetPasswordInput(DTO):
     user_id: int
     token: str
     new_password: str
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class RequestEmailVerificationInput(DTO, FromStr):
+class RequestEmailVerificationInput(DTO):
     user_id: int
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class VerifyEmailInput(DTO, FromStr):
+class VerifyEmailInput(DTO):
     user_id: int
     token: str
 
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
-
 
 @dataclass(frozen=True)
-class GetUserInput(DTO, FromStr):
+class GetUserInput(DTO):
     user_id: int
-
-    @classmethod
-    def from_str(cls, value: str | bytes | bytearray) -> Self:
-        data = json.loads(value)  # type: ignore[misc]
-        return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore[misc]
 
 
 @dataclass(frozen=True)

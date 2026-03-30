@@ -45,32 +45,6 @@ reset_password_use_case = ResetPasswordUseCase(
 verify_email_use_case = VerifyEmailUseCase(repository, token_service)
 
 
-@require_POST  # type: ignore[misc]
-@csrf_exempt  # type: ignore[misc]
-def sign_up(request: HttpRequest) -> JsonResponse:
-    input = SignUpInput.from_str(request.body)
-    output = sign_up_use_case.execute(input)
-
-    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.CREATED)
-
-
-@require_POST  # type: ignore[misc]
-@csrf_exempt  # type: ignore[misc]
-def sign_in(request: HttpRequest) -> JsonResponse:
-    input = SignInInput.from_str(request.body)
-    output = sign_in_use_case.execute(input)
-
-    session_service.login(request, Id(output.id))
-
-    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
-
-
-def sign_out(request: HttpRequest) -> HttpResponse:
-    session_service.logout(request)
-
-    return HttpResponse(status=HTTPStatus.NO_CONTENT)
-
-
 @require_GET  # type: ignore[misc]
 def me(request: HttpRequest) -> HttpResponse:
     user_id = session_service.get_current_user_id(request)
@@ -82,6 +56,32 @@ def me(request: HttpRequest) -> HttpResponse:
     output = get_user_use_case.execute(input)
 
     return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
+
+
+@require_POST  # type: ignore[misc]
+@csrf_exempt  # type: ignore[misc]
+def sign_up(request: HttpRequest) -> JsonResponse:
+    input = SignUpInput.parse_json(request.body)
+    output = sign_up_use_case.execute(input)
+
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.CREATED)
+
+
+@require_POST  # type: ignore[misc]
+@csrf_exempt  # type: ignore[misc]
+def sign_in(request: HttpRequest) -> JsonResponse:
+    input = SignInInput.parse_json(request.body)
+    output = sign_in_use_case.execute(input)
+
+    session_service.login(request, Id(output.id))
+
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
+
+
+def sign_out(request: HttpRequest) -> HttpResponse:
+    session_service.logout(request)
+
+    return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
 
 @require_POST  # type: ignore[misc]
