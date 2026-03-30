@@ -9,8 +9,6 @@ class SignInInput:
 
 @dataclass(frozen=True)
 class SignUpInput:
-    first_name: str
-    last_name: str
     username: str
     email: str
     password: str
@@ -22,5 +20,3 @@ class UserOutput:
     email: str
     username: str
     password: str
-    first_name: str
-    last_name: str

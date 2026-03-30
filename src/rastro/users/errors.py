@@ -9,10 +9,6 @@ class InvalidUsernameError(BaseError):
     code = "USERS_INVALID_USERNAME"
 
 
-class InvalidNameError(BaseError):
-    code = "USERS_INVALID_NAME"
-
-
 class InvalidPasswordError(BaseError):
     code = "USERS_INVALID_PASSWORD"
 

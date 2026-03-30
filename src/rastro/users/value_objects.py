@@ -33,12 +33,6 @@ class Username(ValueObject[str]):
             )
 
 
-class Name(ValueObject[str]): ...
-
-
-class PasswordHash(ValueObject[str]): ...
-
-
 class Password(ValueObject[str]):
     MIN_LENGTH = 8
 

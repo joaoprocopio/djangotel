@@ -9,7 +9,7 @@ from rastro.users.errors import (
     UsernameAlreadyExistsError,
 )
 from rastro.users.repository import UserRepository
-from rastro.users.value_objects import PasswordHash
+from rastro.users.value_objects import Password
 
 
 class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
@@ -25,15 +25,13 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
                 f"Username already exists: {username.value}"
             )
 
-        password_hash = PasswordHash(make_password(password))
+        password = Password(make_password(password))
 
         user = User(
             id=None,
             username=username,
             email=email,
-            password_hash=password_hash,
-            first_name=first_name,
-            last_name=last_name,
+            password=password,
         )
 
         saved_user = self.repository.save(user)
@@ -54,7 +52,7 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         if user is None:
             raise AuthenticationError("Invalid credentials")
 
-        if not check_password(password, user.password_hash.value):
+        if not check_password(password, user.password.value):
             raise AuthenticationError("Invalid credentials")
 
         return present_user(user)
