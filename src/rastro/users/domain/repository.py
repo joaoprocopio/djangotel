@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
 
-from rastro.users.domain.aggregates import User
-from rastro.users.domain.value_objects import Email, Username
+from rastro.base.entity import Id
+from rastro.users.domain.user import User
+from rastro.users.domain.value_objects import Email, HashedPassword, Username
 
 
 class UserRepository(ABC):
     @abstractmethod
-    def get_by_id(self, id: int) -> User | None: ...
+    def create(
+        self, username: Username, email: Email, hashed_password: HashedPassword
+    ) -> User: ...
+
+    @abstractmethod
+    def get_by_id(self, id: Id) -> User | None: ...
 
     @abstractmethod
     def get_by_email(self, email: Email) -> User | None: ...
@@ -15,10 +21,10 @@ class UserRepository(ABC):
     def get_by_username(self, username: Username) -> User | None: ...
 
     @abstractmethod
-    def save(self, user: User) -> User: ...
+    def update(self, user: User) -> User: ...
 
     @abstractmethod
-    def delete(self, user: User) -> None: ...
+    def delete(self, id: Id) -> None: ...
 
     @abstractmethod
     def exists_by_email(self, email: Email) -> bool: ...

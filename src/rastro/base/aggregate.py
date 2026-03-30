@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
-from rastro.base.domain_events import DomainEvent
-from rastro.base.entities import Entity
+from rastro.base.domain_event import DomainEvent
+from rastro.base.entity import Entity
 
 ID = TypeVar("ID")
 

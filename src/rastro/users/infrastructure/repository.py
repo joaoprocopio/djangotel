@@ -1,20 +1,40 @@
 from django.contrib.auth.models import User as DjangoUser
 from django.contrib.auth.tokens import default_token_generator
 
-from rastro.base import Id
-from rastro.users.domain.aggregates import User
+from rastro.base.entity import Id
 from rastro.users.domain.errors import (
     EmailAlreadyExistsError,
     UsernameAlreadyExistsError,
 )
 from rastro.users.domain.repository import UserRepository
+from rastro.users.domain.user import User
 from rastro.users.domain.value_objects import Email, HashedPassword, Username
 
 
 class DjangoUserRepository(UserRepository):
-    def get_by_id(self, id: int) -> User | None:
+    def create(
+        self, username: Username, email: Email, hashed_password: HashedPassword
+    ) -> User:
+        if self.exists_by_email(email):
+            raise EmailAlreadyExistsError(f"Email {email.value} already exists")
+        if self.exists_by_username(username):
+            raise UsernameAlreadyExistsError(
+                f"Username {username.value} already exists"
+            )
+
+        django_user = DjangoUser.objects.create_user(
+            username=username.value,
+            email=email.value,
+            password=hashed_password.value,
+        )
+        django_user.is_active = True
+        django_user.save()
+
+        return self._to_domain(django_user)
+
+    def get_by_id(self, id: Id) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(pk=id)
+            django_user = DjangoUser.objects.get(pk=id.value)
             return self._to_domain(django_user)
         except DjangoUser.DoesNotExist:
             return None
@@ -33,45 +53,7 @@ class DjangoUserRepository(UserRepository):
         except DjangoUser.DoesNotExist:
             return None
 
-    def save(self, user: User) -> User:
-        if user.id is None:
-            return self._create(user)
-        return self._update(user)
-
-    def delete(self, user: User) -> None:
-        if user.id is None:
-            return
-        try:
-            django_user = DjangoUser.objects.get(pk=user.id.value)
-            django_user.delete()
-        except DjangoUser.DoesNotExist:
-            pass
-
-    def exists_by_email(self, email: Email) -> bool:
-        return DjangoUser.objects.filter(email=email.value).exists()
-
-    def exists_by_username(self, username: Username) -> bool:
-        return DjangoUser.objects.filter(username=username.value).exists()
-
-    def _create(self, user: User) -> User:
-        if self.exists_by_email(user.email):
-            raise EmailAlreadyExistsError(f"Email {user.email.value} already exists")
-        if self.exists_by_username(user.username):
-            raise UsernameAlreadyExistsError(
-                f"Username {user.username.value} already exists"
-            )
-
-        django_user = DjangoUser.objects.create_user(
-            username=user.username.value,
-            email=user.email.value,
-            password=user.hashed_password.value,
-        )
-        django_user.is_active = user.is_active
-        django_user.save()
-
-        return self._to_domain(django_user)
-
-    def _update(self, user: User) -> User:
+    def update(self, user: User) -> User:
         try:
             django_user = DjangoUser.objects.get(pk=user.id.value)
 
@@ -94,7 +76,20 @@ class DjangoUserRepository(UserRepository):
 
             return self._to_domain(django_user)
         except DjangoUser.DoesNotExist:
-            raise ValueError(f"User with id {user.id} not found")
+            raise ValueError(f"User with id {user.id.value} not found")
+
+    def delete(self, id: Id) -> None:
+        try:
+            django_user = DjangoUser.objects.get(pk=id.value)
+            django_user.delete()
+        except DjangoUser.DoesNotExist:
+            pass
+
+    def exists_by_email(self, email: Email) -> bool:
+        return DjangoUser.objects.filter(email=email.value).exists()
+
+    def exists_by_username(self, username: Username) -> bool:
+        return DjangoUser.objects.filter(username=username.value).exists()
 
     def _to_domain(self, django_user: DjangoUser) -> User:
         return User(

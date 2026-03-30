@@ -1,13 +1,15 @@
-from rastro.base import UseCase
+from typing import TYPE_CHECKING
+
+from rastro.base.entity import Id
+from rastro.base.use_case import UseCase
 from rastro.users.application.dtos import (
+    GetUserInput,
     ResetPasswordInput,
     SignInInput,
-    SignOutInput,
     SignUpInput,
     UserOutput,
     VerifyEmailInput,
 )
-from rastro.users.domain.aggregates import User
 from rastro.users.domain.errors import (
     AuthenticationError,
     EmailAlreadyExistsError,
@@ -18,7 +20,6 @@ from rastro.users.domain.errors import (
 from rastro.users.domain.events import (
     UserEmailVerified,
     UserLoggedIn,
-    UserLoggedOut,
     UserPasswordResetCompleted,
     UserPasswordResetRequested,
     UserRegistered,
@@ -28,7 +29,7 @@ from rastro.users.domain.services import (
     PasswordHashingService,
     TokenService,
 )
-from rastro.users.domain.value_objects import Email, Password, Username
+from rastro.users.domain.value_objects import Email, RawPassword, Username
 
 
 class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
@@ -43,7 +44,7 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
     def execute(self, input: SignUpInput) -> UserOutput:
         email = Email(input.email)
         username = Username(input.username)
-        password = Password(input.password)
+        raw_password = RawPassword(input.password)
 
         if self._repository.exists_by_email(email):
             raise EmailAlreadyExistsError(f"Email {input.email} already exists")
@@ -53,33 +54,24 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
                 f"Username {input.username} already exists"
             )
 
-        hashed_password = self._password_hashing_service.hash_password(password)
+        hashed_password = self._password_hashing_service.hash(raw_password)
 
-        user = User(
-            id=None,
-            username=username,
-            email=email,
-            hashed_password=hashed_password,
-            is_active=True,
-            is_verified=False,
-        )
+        user = self._repository.create(username, email, hashed_password)
 
         user.add_domain_event(
             UserRegistered(
-                user_id=0,
+                user_id=user.id.value,
                 email=input.email,
                 username=input.username,
             )
         )
 
-        saved_user = self._repository.save(user)
-
         return UserOutput(
-            id=saved_user.id.value,
-            email=saved_user.email.value,
-            username=saved_user.username.value,
-            is_active=saved_user.is_active,
-            is_verified=saved_user.is_verified,
+            id=user.id.value,
+            email=user.email.value,
+            username=user.username.value,
+            is_active=user.is_active,
+            is_verified=user.is_verified,
         )
 
 
@@ -101,10 +93,10 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         if user is None:
             raise AuthenticationError("Invalid credentials")
 
-        password = Password(input.password)
+        raw_password = RawPassword(input.password)
 
-        if not self._password_hashing_service.verify_password(
-            password, user.hashed_password
+        if not self._password_hashing_service.verify(
+            raw_password, user.hashed_password
         ):
             raise AuthenticationError("Invalid credentials")
 
@@ -119,19 +111,7 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         )
 
 
-class SignOutUseCase(UseCase[SignOutInput, None]):
-    def __init__(self, repository: UserRepository):
-        self._repository = repository
-
-    def execute(self, input: SignOutInput) -> None:
-        user = self._repository.get_by_id(input.user_id)
-        if user is None:
-            raise UserNotFoundError(f"User with id {input.user_id} not found")
-
-        user.add_domain_event(UserLoggedOut(user_id=user.id.value))
-
-
-class RequestPasswordResetUseCase(UseCase[None, None]):
+class RequestPasswordResetUseCase(UseCase[str, str]):
     def __init__(
         self,
         repository: UserRepository,
@@ -140,7 +120,8 @@ class RequestPasswordResetUseCase(UseCase[None, None]):
         self._repository = repository
         self._token_service = token_service
 
-    def execute(self, email: str) -> str:
+    def execute(self, input: str) -> str:
+        email = input
         user = self._repository.get_by_email(Email(email))
         if user is None:
             raise UserNotFoundError(f"User with email {email} not found")
@@ -170,20 +151,21 @@ class ResetPasswordUseCase(UseCase[ResetPasswordInput, UserOutput]):
         self._password_hashing_service = password_hashing_service
 
     def execute(self, input: ResetPasswordInput) -> UserOutput:
-        user = self._repository.get_by_id(input.user_id)
+        user_id = Id(input.user_id)
+        user = self._repository.get_by_id(user_id)
         if user is None:
             raise UserNotFoundError(f"User with id {input.user_id} not found")
 
-        if not self._token_service.verify_token(input.token, "password_reset"):
+        if self._token_service.verify_token(input.token, "password_reset") is None:
             raise InvalidTokenError("Invalid or expired token")
 
-        new_password = Password(input.new_password)
-        hashed_password = self._password_hashing_service.hash_password(new_password)
+        raw_password = RawPassword(input.new_password)
+        hashed_password = self._password_hashing_service.hash(raw_password)
 
         user.update_password(hashed_password)
         user.add_domain_event(UserPasswordResetCompleted(user_id=user.id.value))
 
-        saved_user = self._repository.save(user)
+        saved_user = self._repository.update(user)
 
         return UserOutput(
             id=saved_user.id.value,
@@ -204,17 +186,18 @@ class VerifyEmailUseCase(UseCase[VerifyEmailInput, UserOutput]):
         self._token_service = token_service
 
     def execute(self, input: VerifyEmailInput) -> UserOutput:
-        user = self._repository.get_by_id(input.user_id)
+        user_id = Id(input.user_id)
+        user = self._repository.get_by_id(user_id)
         if user is None:
             raise UserNotFoundError(f"User with id {input.user_id} not found")
 
-        if not self._token_service.verify_token(input.token, "email_verification"):
+        if self._token_service.verify_token(input.token, "email_verification") is None:
             raise InvalidTokenError("Invalid or expired token")
 
         user.verify_email()
         user.add_domain_event(UserEmailVerified(user_id=user.id.value))
 
-        saved_user = self._repository.save(user)
+        saved_user = self._repository.update(user)
 
         return UserOutput(
             id=saved_user.id.value,
@@ -225,14 +208,15 @@ class VerifyEmailUseCase(UseCase[VerifyEmailInput, UserOutput]):
         )
 
 
-class GetUserUseCase(UseCase[int, UserOutput]):
+class GetUserUseCase(UseCase[GetUserInput, UserOutput]):
     def __init__(self, repository: UserRepository):
         self._repository = repository
 
-    def execute(self, user_id: int) -> UserOutput:
+    def execute(self, input: GetUserInput) -> UserOutput:
+        user_id = Id(input.user_id)
         user = self._repository.get_by_id(user_id)
         if user is None:
-            raise UserNotFoundError(f"User with id {user_id} not found")
+            raise UserNotFoundError(f"User with id {input.user_id} not found")
 
         return UserOutput(
             id=user.id.value,

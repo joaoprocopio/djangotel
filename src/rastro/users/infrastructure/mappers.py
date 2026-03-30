@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User as DjangoUser
 
-from rastro.base import Id
-from rastro.base.mappers import Mapper
-from rastro.users.domain.aggregates import User
+from rastro.base.entity import Id
+from rastro.base.mapper import Mapper
+from rastro.users.domain.user import User
 from rastro.users.domain.value_objects import Email, HashedPassword, Username
 
 
@@ -19,11 +19,11 @@ class DjangoUserToDomainMapper(Mapper[DjangoUser, User]):
         )
 
 
-class DomainUserToOutputMapper(Mapper[User, dict]):
+class DomainUserToOutputMapper(Mapper[User, dict[str, object]]):
     @staticmethod
-    def map(input: User) -> dict:
+    def map(input: User) -> dict[str, object]:
         return {
-            "id": input.id.value if input.id else None,
+            "id": input.id.value,
             "username": input.username.value,
             "email": input.email.value,
             "is_active": input.is_active,

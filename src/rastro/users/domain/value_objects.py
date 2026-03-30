@@ -1,7 +1,7 @@
 import re
 
-from rastro.base.parsers import is_valid_email
-from rastro.base.value_objects import ValueObject
+from rastro.base.parser import is_valid_email
+from rastro.base.value_object import ValueObject
 from rastro.users.domain.errors import (
     InvalidEmailError,
     InvalidPasswordError,
@@ -31,7 +31,7 @@ class Username(ValueObject[str]):
             )
 
 
-class Password(ValueObject[str]):
+class RawPassword(ValueObject[str]):
     MIN_LENGTH = 8
 
     def validate(self) -> None:

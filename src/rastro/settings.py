@@ -2,7 +2,7 @@ from pathlib import Path
 
 import django_stubs_ext
 
-from rastro.base.parsers import parse_booleanish, parse_csv
+from rastro.base.parser import parse_booleanish, parse_csv
 from rastro.env import cast_env, get_env
 
 django_stubs_ext.monkeypatch()

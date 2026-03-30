@@ -1,29 +1,32 @@
 from abc import abstractmethod
+from typing import TYPE_CHECKING
 
-from rastro.base import DomainService
-from rastro.users.domain.aggregates import User
-from rastro.users.domain.value_objects import HashedPassword, Password
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+from rastro.base.domain_service import DomainService
+from rastro.base.entity import Id
+from rastro.users.domain.user import User
+from rastro.users.domain.value_objects import HashedPassword, RawPassword
 
 
 class PasswordHashingService(DomainService):
     @abstractmethod
-    def hash_password(self, password: Password) -> HashedPassword: ...
+    def hash(self, password: RawPassword) -> HashedPassword: ...
 
     @abstractmethod
-    def verify_password(
-        self, password: Password, hashed_password: HashedPassword
-    ) -> bool: ...
+    def verify(self, password: RawPassword, hashed: HashedPassword) -> bool: ...
 
 
-class AuthenticationService(DomainService):
+class SessionService(DomainService):
     @abstractmethod
-    def authenticate(self, user: User, password: Password) -> bool: ...
+    def login(self, request: "HttpRequest", user_id: Id) -> None: ...
 
     @abstractmethod
-    def login(self, user: User) -> str: ...
+    def logout(self, request: "HttpRequest") -> None: ...
 
     @abstractmethod
-    def logout(self, user: User) -> None: ...
+    def get_current_user_id(self, request: "HttpRequest") -> Id | None: ...
 
 
 class EmailService(DomainService):
@@ -42,4 +45,4 @@ class TokenService(DomainService):
     def generate_password_reset_token(self, user: User) -> str: ...
 
     @abstractmethod
-    def verify_token(self, token: str, token_type: str) -> int | None: ...
+    def verify_token(self, token: str, token_type: str) -> Id | None: ...

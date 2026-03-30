@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import Protocol
 
-from rastro.base.entities import Entity
-from rastro.base.aggregates import AggregateRoot
+from rastro.base.entity import Entity
+from rastro.base.aggregate import AggregateRoot
 
 
 class DomainService(ABC):

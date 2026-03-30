@@ -1,5 +1,8 @@
 import logging
+from typing import cast
 
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.django import DjangoInstrumentor
@@ -34,15 +37,16 @@ def instrument() -> None:
 
     trace.set_tracer_provider(tracer_provider)
 
-    # def response_hook(span, request: HttpRequest, response: HttpResponse) -> None:
-    #     if request.user.is_authenticated:
-    #         span.set_attribute("user.id", request.user.pk)
-    #         span.set_attribute(
-    #             "user.email", getattr(request.user, request.user.EMAIL_FIELD)
-    #         )
-    #         span.set_attribute("user.full_name", request.user.get_full_name())
+    def response_hook(
+        span: trace.Span, request: WSGIRequest, response: HttpResponse
+    ) -> None:
+        if request.user.id is not None and request.user.is_authenticated:
+            span.set_attribute("user.id", request.user.pk)
+            span.set_attribute(
+                "user.email",
+                cast(str, getattr(request.user, request.user.get_email_field_name())),
+            )
 
-    # response_hook=response_hook
-    DjangoInstrumentor().instrument()
+    DjangoInstrumentor().instrument(response_hook=response_hook)
 
     logger.info("OpenTelemetry Django initialized with OTLP exporter")

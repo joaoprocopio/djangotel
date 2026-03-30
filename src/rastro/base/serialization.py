@@ -2,7 +2,7 @@ import html
 from dataclasses import asdict, fields, is_dataclass
 from typing import TypeVar
 
-from rastro.base.value_objects import ValueObject
+from rastro.base.value_object import ValueObject
 
 
 def sanitize_string(value: str, max_length: int | None = None) -> str:

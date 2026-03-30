@@ -15,11 +15,6 @@ class SignInInput:
 
 
 @dataclass(frozen=True)
-class SignOutInput:
-    user_id: int
-
-
-@dataclass(frozen=True)
 class UserOutput:
     id: int
     email: str
@@ -49,3 +44,8 @@ class RequestEmailVerificationInput:
 class VerifyEmailInput:
     user_id: int
     token: str
+
+
+@dataclass(frozen=True)
+class GetUserInput:
+    user_id: int

@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from rastro.base.presenters import Presenter
+from rastro.base.presenter import Presenter
 from rastro.users.application.dtos import UserOutput
 
 

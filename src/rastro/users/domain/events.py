@@ -1,8 +1,6 @@
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any
+from dataclasses import dataclass
 
-from rastro.base import DomainEvent
+from rastro.base.domain_event import DomainEvent
 
 
 @dataclass(frozen=True, kw_only=True)

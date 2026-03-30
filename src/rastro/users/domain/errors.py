@@ -1,4 +1,4 @@
-from rastro.base.errors import BaseError
+from rastro.base.error import BaseError
 
 
 class InvalidEmailError(BaseError):
