@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Self
 
 from rastro.base.dto import DTO
@@ -14,9 +14,8 @@ class SignUpInput(DTO, FromStr):
 
     @classmethod
     def from_str(cls, bytes: str | bytes | bytearray) -> Self:
-        data = json.loads(bytes)
-
-        return cls()
+        data = json.loads(value)
+        return cls(**{field.name: data[field.name] for field in fields(cls)})
 
 
 @dataclass(frozen=True)
