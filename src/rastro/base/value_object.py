@@ -9,9 +9,13 @@ T = TypeVar("T")
 class ValueObject(ABC, Generic[T]):
     value: T
 
+    def normalize(self) -> T:
+        return self.value
+
     def validate(self) -> None: ...
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "value", self.normalize())
         self.validate()
 
     def __str__(self) -> str:

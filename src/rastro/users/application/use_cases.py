@@ -60,6 +60,6 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         raw_password = RawPassword(input.password)
 
         if not self.password_hashing_service.verify(raw_password, user.hashed_password):
-            raise AuthenticationError("Invalid credentials")
+            raise AuthenticationError()
 
         return DomainToOutputUserMapper.map(user)
