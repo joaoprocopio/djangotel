@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth import get_user_model
 
 from rastro.auth.domain.entities import User
@@ -10,14 +12,17 @@ from rastro.auth.domain.value_objects import (
 from rastro.auth.infrastructure.mappers import DjangoToDomainUserMapper
 from rastro_base.entity import Id
 
-DjangoUser = get_user_model()
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User as DjangoUser
+else:
+    DjangoUser = get_user_model()
 
 
 class DjangoUserRepository(UserRepository):
     def create(
         self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> User:
-        django_user = DjangoUser.objects.create(
+        django_user = DjangoUser.objects.create(  # type: ignore
             username=username.value,
             email=email.value,
             password=hashed_password.value,
@@ -28,7 +33,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_id(self, id: Id) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(pk=id.value)
+            django_user = DjangoUser.objects.get(pk=id.value)  # type: ignore
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -36,7 +41,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_email(self, email: Email) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(email=email.value)
+            django_user = DjangoUser.objects.get(email=email.value)  # type: ignore
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -44,7 +49,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_username(self, username: Username) -> User | None:
         try:
-            django_user = DjangoUser.objects.get(username=username.value)
+            django_user = DjangoUser.objects.get(username=username.value)  # type: ignore
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
