@@ -25,7 +25,7 @@ class DjangoPasswordHashingService(PasswordHashingService):
 
 class DjangoSessionService(SessionService):
     def login(self, request: HttpRequest, user_id: Id) -> None:
-        django_user = DjangoUser.objects.get(pk=user_id.value)
+        django_user = DjangoUser.objects.get(pk=user_id.value)  # type: ignore[misc]
         login(request, django_user)
 
     def logout(self, request: HttpRequest) -> None:
@@ -51,13 +51,13 @@ class DjangoTokenService(TokenService):
     def generate_verification_token(self, user: User) -> str:
         from django.contrib.auth.tokens import default_token_generator
 
-        django_user = DjangoUser.objects.get(pk=user.id.value)
+        django_user = DjangoUser.objects.get(pk=user.id.value)  # type: ignore[misc]
         return default_token_generator.make_token(django_user)
 
     def generate_password_reset_token(self, user: User) -> str:
         from django.contrib.auth.tokens import default_token_generator
 
-        django_user = DjangoUser.objects.get(pk=user.id.value)
+        django_user = DjangoUser.objects.get(pk=user.id.value)  # type: ignore[misc]
         return default_token_generator.make_token(django_user)
 
     def verify_token(self, token: str, token_type: str) -> Id | None:

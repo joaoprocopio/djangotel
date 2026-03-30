@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from rastro.base import AggregateRoot, Id
+from rastro.base.aggregate import AggregateRoot
+from rastro.base.entity import Id
 from rastro.users.domain.value_objects import Email, HashedPassword, Username
 
 

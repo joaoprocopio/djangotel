@@ -1,4 +1,8 @@
-from django.http import HttpRequest
+import json
+from http import HTTPStatus
+
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.views.decorators.http import require_GET, require_POST
 
 from rastro.base.entity import Id
 from rastro.users.application.dtos import (
@@ -23,7 +27,7 @@ from rastro.users.infrastructure.services import (
     DjangoSessionService,
     DjangoTokenService,
 )
-from rastro.users.interfaces.presenters import UserPresenter, UserPublic
+from rastro.users.interfaces.presenters import UserPresenter
 
 repository = DjangoUserRepository()
 password_hashing_service = DjangoPasswordHashingService()
@@ -40,73 +44,69 @@ reset_password_use_case = ResetPasswordUseCase(
 verify_email_use_case = VerifyEmailUseCase(repository, token_service)
 
 
-def sign_up(request: HttpRequest) -> UserPublic:
-    import json
-
-    data = json.loads(request.body)
-    input_dto = SignUpInput(
-        username=data["username"],
-        email=data["email"],
-        password=data["password"],
-    )
+@require_POST  # type: ignore[misc]
+def sign_up(request: HttpRequest) -> JsonResponse:
+    data = json.loads(request.body)  # type: ignore[misc]
+    username: str = data["username"]  # type: ignore[misc]
+    email: str = data["email"]  # type: ignore[misc]
+    password: str = data["password"]  # type: ignore[misc]
+    input_dto = SignUpInput(username=username, email=email, password=password)
     output: UserOutput = sign_up_use_case.execute(input_dto)
-    return UserPresenter.present(output)
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.CREATED)
 
 
-def sign_in(request: HttpRequest) -> UserPublic:
-    import json
-
-    data = json.loads(request.body)
-    input_dto = SignInInput(
-        query=data["query"],
-        password=data["password"],
-    )
+@require_POST  # type: ignore[misc]
+def sign_in(request: HttpRequest) -> JsonResponse:
+    data = json.loads(request.body)  # type: ignore[misc]
+    query: str = data["query"]  # type: ignore[misc]
+    password: str = data["password"]  # type: ignore[misc]
+    input_dto = SignInInput(query=query, password=password)
     output: UserOutput = sign_in_use_case.execute(input_dto)
     session_service.login(request, Id(output.id))
-    return UserPresenter.present(output)
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
 
 
-def sign_out(request: HttpRequest) -> None:
+def sign_out(request: HttpRequest) -> HttpResponse:
     session_service.logout(request)
+    return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
 
-def current_user(request: HttpRequest) -> UserPublic | None:
+@require_GET  # type: ignore[misc]
+def current_user(request: HttpRequest) -> JsonResponse:
     user_id = session_service.get_current_user_id(request)
     if user_id is None:
-        return None
+        return JsonResponse({}, status=HTTPStatus.UNAUTHORIZED)  # type: ignore[misc]
     input_dto = GetUserInput(user_id=user_id.value)
     output: UserOutput = get_user_use_case.execute(input_dto)
-    return UserPresenter.present(output)
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
 
 
-def request_password_reset(request: HttpRequest) -> str:
-    import json
+@require_POST  # type: ignore[misc]
+def request_password_reset(request: HttpRequest) -> HttpResponse:
+    data = json.loads(request.body)  # type: ignore[misc]
+    email: str = data["email"]  # type: ignore[misc]
+    request_password_reset_use_case.execute(email)
+    return HttpResponse(status=HTTPStatus.NO_CONTENT)
 
-    data = json.loads(request.body)
-    email = data["email"]
-    return request_password_reset_use_case.execute(email)
 
-
-def reset_password(request: HttpRequest) -> UserPublic:
-    import json
-
-    data = json.loads(request.body)
+@require_POST  # type: ignore[misc]
+def reset_password(request: HttpRequest) -> JsonResponse:
+    data = json.loads(request.body)  # type: ignore[misc]
+    user_id: int = data["user_id"]  # type: ignore[misc]
+    token: str = data["token"]  # type: ignore[misc]
+    new_password: str = data["new_password"]  # type: ignore[misc]
     input_dto = ResetPasswordInput(
-        user_id=data["user_id"],
-        token=data["token"],
-        new_password=data["new_password"],
+        user_id=user_id, token=token, new_password=new_password
     )
     output: UserOutput = reset_password_use_case.execute(input_dto)
-    return UserPresenter.present(output)
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
 
 
-def verify_email(request: HttpRequest) -> UserPublic:
-    import json
-
-    data = json.loads(request.body)
-    input_dto = VerifyEmailInput(
-        user_id=data["user_id"],
-        token=data["token"],
-    )
+@require_POST  # type: ignore[misc]
+def verify_email(request: HttpRequest) -> JsonResponse:
+    data = json.loads(request.body)  # type: ignore[misc]
+    user_id: int = data["user_id"]  # type: ignore[misc]
+    token: str = data["token"]  # type: ignore[misc]
+    input_dto = VerifyEmailInput(user_id=user_id, token=token)
     output: UserOutput = verify_email_use_case.execute(input_dto)
-    return UserPresenter.present(output)
+    return JsonResponse(UserPresenter.present(output), status=HTTPStatus.OK)
