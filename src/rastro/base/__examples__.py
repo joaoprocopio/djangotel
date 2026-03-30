@@ -106,6 +106,7 @@ class EmailDomainSpecification(Specification[User]):
 
 
 class UserRepository(Protocol):
+    def add(self, user: User) -> None: ...
     def get_by_email(self, email: Email) -> User | None: ...
     def get_by_specification(self, spec: Specification[User]) -> list[User]: ...
 
@@ -136,7 +137,7 @@ class UserDomainService(DomainService):
 # ============================================================================
 
 
-class UserFactory(Factory[User]):
+class UserFactory(Factory[[str, str, str | None], User]):
     def create(self, email: str, password: str, name: str | None = None) -> User:
         email_vo = Email(email)
         password_vo = Password(password)

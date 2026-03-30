@@ -1,7 +1,8 @@
-from typing import Protocol, TypeVar
+from typing import ParamSpec, Protocol, TypeVar
 
-T = TypeVar("T")
+P = ParamSpec("P")
+T_CO = TypeVar("T_CO", covariant=True)
 
 
-class Factory(Protocol[T]):
-    def create(self, *args, **kwargs) -> T: ...
+class Factory(Protocol[P, T_CO]):
+    def create(self, *args: P.args, **kwargs: P.kwargs) -> T_CO: ...

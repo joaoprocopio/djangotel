@@ -7,7 +7,7 @@ from uuid import uuid4
 T = TypeVar("T")
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class DomainEvent(ABC):
     event_id: str = field(default_factory=lambda: str(uuid4()))
     occurred_at: datetime = field(default_factory=datetime.utcnow)
