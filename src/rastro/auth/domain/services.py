@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from rastro.auth.domain.entities import User
 from rastro.auth.domain.value_objects import HashedPassword, RawPassword
-from rastro.base.service import Service
+from rastro_base.service import Service
 
 
 class PasswordHashingService(Service):

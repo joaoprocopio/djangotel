@@ -2,8 +2,8 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Generic, TypeVar, cast
 
-from rastro.base.error import InvalidIdError
-from rastro.base.value_object import ValueObject
+from rastro_base.error import InvalidIdError
+from rastro_base.value_object import ValueObject
 
 ID = TypeVar("ID")
 

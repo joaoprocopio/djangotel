@@ -1,4 +1,4 @@
-from rastro.base.error import BaseError
+from rastro_base.error import BaseError
 
 
 class AuthenticationError(BaseError):

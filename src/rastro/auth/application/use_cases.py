@@ -15,7 +15,7 @@ from rastro.auth.domain.value_objects import (
     Username,
 )
 from rastro.auth.infrastructure.mappers import DomainToOutputUserMapper
-from rastro.base.use_case import UseCase
+from rastro_base.use_case import UseCase
 
 
 class SignUpUseCase(UseCase[SignUpInput, UserOutput]):

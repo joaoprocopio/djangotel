@@ -1,4 +1,4 @@
-from rastro.base.value_object import ValueObject
+from rastro_base.value_object import ValueObject
 
 
 class Email(ValueObject[str]): ...

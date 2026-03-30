@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from rastro.base.dto import DTO
+from rastro_base.dto import DTO
 
 
 @dataclass(frozen=True)
