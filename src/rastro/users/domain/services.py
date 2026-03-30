@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
-from rastro.base.domain_service import DomainService
+from rastro.base.service import Service
 from rastro.users.domain.entities import User
 from rastro.users.domain.value_objects import HashedPassword, RawPassword
 
 
-class PasswordHashingService(DomainService):
+class PasswordHashingService(Service):
     @abstractmethod
     def hash(self, raw_password: RawPassword) -> HashedPassword: ...
 
@@ -15,7 +15,7 @@ class PasswordHashingService(DomainService):
     ) -> bool: ...
 
 
-class SessionService(DomainService):
+class SessionService(Service):
     @abstractmethod
     def login(self, user: User) -> None: ...
 
