@@ -15,3 +15,7 @@ class InvalidPasswordError(BaseError):
 
 class InvalidUsernameError(BaseError):
     code = "AUTH_INVALID_USERNAME_ERROR"
+
+
+class InvalidEmailError(BaseError):
+    code = "AUTH_INVALID_EMAIL_ERROR"

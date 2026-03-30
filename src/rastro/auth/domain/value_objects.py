@@ -1,13 +1,23 @@
 import re
 import unicodedata
 
-from rastro.auth.domain.errors import InvalidPasswordError, InvalidUsernameError
+from rastro.auth.domain.errors import (
+    InvalidEmailError,
+    InvalidPasswordError,
+    InvalidUsernameError,
+)
 from rastro_base.value_object import ValueObject
 
 
 class Email(ValueObject[str]):
+    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+
     def normalize(self) -> str:
         return self.value.strip().lower()
+
+    def validate(self) -> None:
+        if not self.EMAIL_PATTERN.match(self.value):
+            raise InvalidEmailError()
 
 
 class Username(ValueObject[str]):
