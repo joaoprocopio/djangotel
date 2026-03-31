@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from rastro.tasks.domain.entities import Task
 from rastro.tasks.domain.repository import TaskRepository
@@ -14,7 +14,7 @@ from rastro.tasks.infrastructure.models import TaskModel
 from rastro_base.entity import Id
 
 if TYPE_CHECKING:
-    from rastro.tasks.infrastructure.models import TaskModel as TaskModelType
+    pass
 
 
 class DjangoTaskRepository(TaskRepository):
@@ -26,7 +26,7 @@ class DjangoTaskRepository(TaskRepository):
         priority: TaskPriority,
         due_date: TaskDueDate,
         owner_id: Id,
-        assignee_id: Id | None,
+        assignee_id: Optional[Id],
     ) -> Task:
         task_model = TaskModel.objects.create(  # type: ignore[misc]
             title=title.value,
@@ -40,7 +40,7 @@ class DjangoTaskRepository(TaskRepository):
 
         return DjangoToDomainTaskMapper.map(task_model)
 
-    def get_by_id(self, id: Id) -> Task | None:
+    def get_by_id(self, id: Id) -> Optional[Task]:
         try:
             task_model = TaskModel.objects.get(pk=id.value)  # type: ignore[misc]
 
@@ -61,12 +61,12 @@ class DjangoTaskRepository(TaskRepository):
     def update(
         self,
         id: Id,
-        title: TaskTitle | None = None,
-        description: TaskDescription | None = None,
-        status: TaskStatus | None = None,
-        priority: TaskPriority | None = None,
-        due_date: TaskDueDate | None = None,
-        assignee_id: Id | None = None,
+        title: Optional[TaskTitle] = None,
+        description: Optional[TaskDescription] = None,
+        status: Optional[TaskStatus] = None,
+        priority: Optional[TaskPriority] = None,
+        due_date: Optional[TaskDueDate] = None,
+        assignee_id: Optional[Id] = None,
     ) -> Task:
         task_model = TaskModel.objects.get(pk=id.value)  # type: ignore[misc]
 

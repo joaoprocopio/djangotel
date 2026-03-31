@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from rastro.tasks.domain.value_objects import (
     TaskDescription,
@@ -18,4 +19,4 @@ class Task(Entity[Id]):
     priority: TaskPriority
     due_date: TaskDueDate
     owner_id: Id
-    assignee_id: Id | None
+    assignee_id: Optional[Id]

@@ -43,7 +43,7 @@ class SignInView(View):
         sign_in_use_case = SignInUseCase(repository, password_hashing_service)
         session_service = DjangoSessionService(request)
 
-        input = SignInInput.parse_json(request.body)
+        input = SignInInput.from_json(request.body)
         output = sign_in_use_case.execute(input)
 
         session_service.login(OutputToDomainUserMapper.map(output))
@@ -59,7 +59,7 @@ class SignUpView(View):
         sign_up_use_case = SignUpUseCase(repository, password_hashing_service)
         session_service = DjangoSessionService(request)
 
-        input = SignUpInput.parse_json(request.body)
+        input = SignUpInput.from_json(request.body)
         output = sign_up_use_case.execute(input)
 
         session_service.login(OutputToDomainUserMapper.map(output))

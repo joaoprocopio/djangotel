@@ -1,5 +1,6 @@
 import re
 from collections.abc import Mapping
+from typing import Optional
 
 
 class BaseError(Exception):
@@ -10,13 +11,13 @@ class BaseError(Exception):
     __slots__ = ("title", "details")
 
     code: str
-    title: str | None
-    details: Mapping[str, object] | None
+    title: Optional[str]
+    details: Optional[Mapping[str, object]]
 
     def __init__(
         self,
-        title: str | None = None,
-        details: Mapping[str, object] | None = None,
+        title: Optional[str] = None,
+        details: Optional[Mapping[str, object]] = None,
     ) -> None:
         self.title = title
         self.details = details

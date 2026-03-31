@@ -51,7 +51,7 @@ class TaskListView(View):
 
         repository = DjangoTaskRepository()
         use_case = CreateTaskUseCase(repository)
-        input_dto = CreateTaskInput.parse_json(request.body)
+        input_dto = CreateTaskInput.from_json(request.body)
         output = use_case.execute((user.id, input_dto))
 
         return JsonResponse(TaskPresenter.present(output), status=HTTPStatus.CREATED)
@@ -86,7 +86,7 @@ class TaskDetailView(View):
 
         repository = DjangoTaskRepository()
         use_case = UpdateTaskUseCase(repository)
-        input_dto = UpdateTaskInput.parse_json(request.body)
+        input_dto = UpdateTaskInput.from_json(request.body)
 
         try:
             output = use_case.execute((Id(task_id), user.id, input_dto))

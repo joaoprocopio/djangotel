@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
-from rastro_base.dto import DTO
+from rastro_base.dto import DTO, FromJson
 
 
 @dataclass(frozen=True)
-class SignUpInput(DTO):
+class SignUpInput(DTO, FromJson):
     username: str
     email: str
     password: str
 
 
 @dataclass(frozen=True)
-class SignInInput(DTO):
+class SignInInput(DTO, FromJson):
     query: str
     password: str
 

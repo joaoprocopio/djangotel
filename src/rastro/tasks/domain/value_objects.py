@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from rastro.tasks.domain.errors import (
     InvalidTaskDescriptionError,
@@ -15,7 +16,7 @@ class TaskTitle(ValueObject[str]):
             raise InvalidTaskTitleError()
 
 
-class TaskDescription(ValueObject[str | None]):
+class TaskDescription(ValueObject[Optional[str]]):
     def validate(self) -> None:
         if self.value is not None and len(self.value) > 2000:
             raise InvalidTaskDescriptionError()
@@ -38,6 +39,6 @@ class TaskPriority(ValueObject[str]):
             raise InvalidTaskPriorityError()
 
 
-class TaskDueDate(ValueObject[datetime | None]):
+class TaskDueDate(ValueObject[Optional[datetime]]):
     def validate(self) -> None:
         pass

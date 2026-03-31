@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from rastro.tasks.domain.entities import Task
 from rastro.tasks.domain.value_objects import (
@@ -21,11 +22,11 @@ class TaskRepository(ABC):
         priority: TaskPriority,
         due_date: TaskDueDate,
         owner_id: Id,
-        assignee_id: Id | None,
+        assignee_id: Optional[Id],
     ) -> Task: ...
 
     @abstractmethod
-    def get_by_id(self, id: Id) -> Task | None: ...
+    def get_by_id(self, id: Id) -> Optional[Task]: ...
 
     @abstractmethod
     def list_by_owner(self, owner_id: Id) -> list[Task]: ...
@@ -37,12 +38,12 @@ class TaskRepository(ABC):
     def update(
         self,
         id: Id,
-        title: TaskTitle | None = None,
-        description: TaskDescription | None = None,
-        status: TaskStatus | None = None,
-        priority: TaskPriority | None = None,
-        due_date: TaskDueDate | None = None,
-        assignee_id: Id | None = None,
+        title: Optional[TaskTitle] = None,
+        description: Optional[TaskDescription] = None,
+        status: Optional[TaskStatus] = None,
+        priority: Optional[TaskPriority] = None,
+        due_date: Optional[TaskDueDate] = None,
+        assignee_id: Optional[Id] = None,
     ) -> Task: ...
 
     @abstractmethod

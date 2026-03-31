@@ -5,8 +5,11 @@ from typing import Self
 
 
 @dataclass(frozen=True)
-class DTO(ABC):
+class DTO(ABC): ...
+
+
+class FromJson:
     @classmethod
-    def parse_json(cls, value: str | bytes | bytearray) -> Self:
+    def from_json(cls, value: str | bytes | bytearray) -> Self:
         data = json.loads(value)  # type: ignore
         return cls(**{f.name: data[f.name] for f in fields(cls) if f.name in data})  # type: ignore

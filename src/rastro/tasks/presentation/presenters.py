@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 from rastro.tasks.application.dtos import TaskOutput
 from rastro_base.presenter import Presenter
@@ -7,12 +7,12 @@ from rastro_base.presenter import Presenter
 class TaskPublic(TypedDict):
     id: int
     title: str
-    description: str | None
+    description: Optional[str]
     status: str
     priority: str
-    due_date: str | None
+    due_date: Optional[str]
     owner_id: int
-    assignee_id: int | None
+    assignee_id: Optional[int]
 
 
 class TaskListPublic(TypedDict):

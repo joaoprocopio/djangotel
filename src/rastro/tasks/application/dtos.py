@@ -1,36 +1,37 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
-from rastro_base.dto import DTO
+from rastro_base.dto import DTO, FromJson
 
 
 @dataclass(frozen=True)
-class CreateTaskInput(DTO):
+class CreateTaskInput(DTO, FromJson):
     title: str
-    description: str | None
+    description: Optional[str]
     status: str
     priority: str
-    due_date: datetime | None
-    assignee_id: int | None
+    due_date: Optional[datetime]
+    assignee_id: Optional[int]
 
 
 @dataclass(frozen=True)
-class UpdateTaskInput(DTO):
-    title: str | None
-    description: str | None
-    status: str | None
-    priority: str | None
-    due_date: datetime | None
-    assignee_id: int | None
+class UpdateTaskInput(DTO, FromJson):
+    title: Optional[str]
+    description: Optional[str]
+    status: Optional[str]
+    priority: Optional[str]
+    due_date: Optional[datetime]
+    assignee_id: Optional[int]
 
 
 @dataclass(frozen=True)
 class TaskOutput(DTO):
     id: int
     title: str
-    description: str | None
+    description: Optional[str]
     status: str
     priority: str
-    due_date: datetime | None
+    due_date: Optional[datetime]
     owner_id: int
-    assignee_id: int | None
+    assignee_id: Optional[int]
