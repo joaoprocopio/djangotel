@@ -22,10 +22,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    # volumes:
-    #   - type: volume
-    #     source: django_static
-    #     target: /app/src/static
+    volumes:
+      - type: volume
+        source: django_static
+        target: /app/src/static
     ports:
       - published: 8000
         target: 8000
@@ -128,4 +128,4 @@ volumes:
   postgres_data:
   grafana_data:
   clickhouse_data:
-  # django_static:
+  django_static:
