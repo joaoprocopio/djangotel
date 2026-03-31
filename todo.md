@@ -1,13 +1,11 @@
 # todo otel
 
-- [ ] coletar structured logging
-- [ ] coletar metricas
+- [ ] fazer teste de carga pelo k6
 - [ ] montar um dashboard no grafana
   - [ ] tempo de resposta
   - [ ] erro por endpoint
   - [ ] taxa de erro
   - [ ] erros mais comuns
-- [ ] fazer teste de carga pelo k6
 
 # ddd
 
