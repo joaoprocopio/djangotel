@@ -1,10 +1,13 @@
 from pathlib import Path
 
-import django_stubs_ext
-
 from rastro.env import get_env, parse_booleanish, parse_csv
 
-django_stubs_ext.monkeypatch()
+try:
+    import django_stubs_ext
+
+    django_stubs_ext.monkeypatch()
+except ImportError:
+    pass
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

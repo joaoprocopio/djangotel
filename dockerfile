@@ -1,10 +1,6 @@
 # Use a Python image with uv pre-installed
 FROM astral/uv:python3.14-trixie
 
-# Setup a non-root user
-RUN groupadd --system --gid 999 nonroot \
- && useradd --system --gid 999 --uid 999 --create-home nonroot
-
 # Install the project into `/app`
 WORKDIR /app
 
@@ -37,6 +33,3 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []
-
-# Use the non-root user to run our application
-USER nonroot
