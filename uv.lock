@@ -533,6 +533,7 @@ source = { editable = "." }
 dependencies = [
     { name = "django", extra = ["argon2"] },
     { name = "django-stubs-ext" },
+    { name = "opentelemetry-api" },
     { name = "opentelemetry-exporter-otlp" },
     { name = "opentelemetry-instrumentation-django" },
     { name = "opentelemetry-sdk" },
@@ -548,6 +549,7 @@ dev = [
 requires-dist = [
     { name = "django", extras = ["argon2"], specifier = ">=6.0.3" },
     { name = "django-stubs-ext", specifier = ">=6.0.1" },
+    { name = "opentelemetry-api", specifier = ">=1.40.0" },
     { name = "opentelemetry-exporter-otlp", specifier = ">=1.40.0" },
     { name = "opentelemetry-instrumentation-django", specifier = ">=0.61b0" },
     { name = "opentelemetry-sdk", specifier = ">=1.40.0" },
