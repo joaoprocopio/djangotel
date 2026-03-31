@@ -1,6 +1,6 @@
 import logging
-from typing import cast
 
+from django.contrib.auth import get_user
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from opentelemetry import _logs, metrics, trace
@@ -78,16 +78,18 @@ def _instrument_django() -> None:
     def response_hook(
         span: trace.Span, request: WSGIRequest, response: HttpResponse
     ) -> None:
-        user = getattr(request, "user", None)
+        user = get_user(request)
+
         if (
             user is not None
             and hasattr(user, "is_authenticated")
             and user.is_authenticated
-        ):x
+        ):
             span.set_attribute("user.id", str(user.pk))
-            email_field = getattr(user, "get_email_field_name", lambda: "email")()
-            email = getattr(user, email_field, None)
-            if email:
+
+            email: str | None = getattr(user, user.get_email_field_name())
+
+            if email is not None:
                 span.set_attribute("user.email", str(email))
 
     DjangoInstrumentor().instrument(response_hook=response_hook)
