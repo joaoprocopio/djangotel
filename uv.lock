@@ -557,7 +557,6 @@ version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "django", extra = ["argon2"] },
-    { name = "django-stubs-ext" },
     { name = "gunicorn" },
     { name = "opentelemetry-api" },
     { name = "opentelemetry-exporter-otlp" },
@@ -570,12 +569,12 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "django-stubs", extra = ["compatible-mypy"] },
+    { name = "django-stubs-ext" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "django", extras = ["argon2"], specifier = ">=6.0.3" },
-    { name = "django-stubs-ext", specifier = ">=6.0.1" },
     { name = "gunicorn", specifier = ">=25.3.0" },
     { name = "opentelemetry-api", specifier = ">=1.40.0" },
     { name = "opentelemetry-exporter-otlp", specifier = ">=1.40.0" },
@@ -586,7 +585,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "django-stubs", extras = ["compatible-mypy"], specifier = ">=6.0.1" }]
+dev = [
+    { name = "django-stubs", extras = ["compatible-mypy"], specifier = ">=6.0.1" },
+    { name = "django-stubs-ext", specifier = ">=6.0.1" },
+]
 
 [[package]]
 name = "requests"

@@ -1,9 +1,9 @@
 services:
-  rastro:
+  django:
     build:
       context: .
       dockerfile: dockerfile
-    command: "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn -w 8 rastro.wsgi --bind 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn -w 8 rastro.wsgi --bind 0.0.0.0:8000"
     environment:
       RASTRO_DJANGO_DEPLOYMENT_ID: "6da45eb569938b3ec583769821fe0ef6320e1275"
       RASTRO_DJANGO_DEPLOYMENT_ENVIRONMENT: "prod"

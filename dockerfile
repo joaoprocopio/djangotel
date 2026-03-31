@@ -1,5 +1,5 @@
 # Use a Python image with uv pre-installed
-FROM astral-sh/uv:python3.14-trixie
+FROM astral/uv:python3.14-trixie
 
 # Setup a non-root user
 RUN groupadd --system --gid 999 nonroot \
