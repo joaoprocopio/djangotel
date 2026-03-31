@@ -11,7 +11,7 @@ services:
       RASTRO_DJANGO_OTEL_GRPC_ENDPOINT: "otel:4317"
       RASTRO_DJANGO_OTEL_HTTP_ENDPOINT: "otel:4318"
 
-      RASTRO_DJANGO_SECRET_KEY: ")ck)g$@h$$#(9sn2+bvuvi69@$s+iffe=3qjbg+=ck-!3(-gu!"
+      RASTRO_DJANGO_SECRET_KEY: "019d4579758e762eb65db7ba3d7ceb81"
       RASTRO_DJANGO_DEBUG: "0"
 
       RASTRO_DJANGO_POSTGRES_DB: "postgres"
