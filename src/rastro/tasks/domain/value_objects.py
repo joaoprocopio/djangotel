@@ -1,44 +1,51 @@
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
+from enum import StrEnum
+from typing import Self
 
 from rastro.tasks.domain.errors import (
     InvalidTaskDescriptionError,
-    InvalidTaskPriorityError,
-    InvalidTaskStatusError,
     InvalidTaskTitleError,
 )
 from rastro_base.value_object import ValueObject
+from rastro_shared_kernel.mixins import Validate
 
 
-class TaskTitle(ValueObject[str]):
-    def validate(self) -> None:
+@dataclass(frozen=True)
+class TaskTitle(ValueObject, Validate):
+    value: str
+
+    def validate(self) -> Self:
         if len(self.value) < 1 or len(self.value) > 200:
             raise InvalidTaskTitleError()
+        return self
 
 
-class TaskDescription(ValueObject[Optional[str]]):
-    def validate(self) -> None:
-        if self.value is not None and len(self.value) > 2000:
+@dataclass(frozen=True)
+class TaskDescription(ValueObject, Validate):
+    value: str
+
+    def validate(self) -> Self:
+        if len(self.value) > 2000:
             raise InvalidTaskDescriptionError()
+        return self
 
 
-# TODO: enum, maybe?
-class TaskStatus(ValueObject[str]):
-    VALID_STATUSES = frozenset({"OPEN", "IN_PROGRESS", "BLOCKED", "DONE", "CLOSED"})
-
-    def validate(self) -> None:
-        if self.value not in self.VALID_STATUSES:
-            raise InvalidTaskStatusError()
-
-
-class TaskPriority(ValueObject[str]):
-    VALID_PRIORITIES = frozenset({"LOW", "MEDIUM", "HIGH", "CRITICAL"})
-
-    def validate(self) -> None:
-        if self.value not in self.VALID_PRIORITIES:
-            raise InvalidTaskPriorityError()
+class TaskStatus(StrEnum):
+    OPEN = "open"
+    IN_PROGRESS = "in_progress"
+    BLOCKED = "blocked"
+    DONE = "done"
+    CLOSED = "closed"
 
 
-class TaskDueDate(ValueObject[Optional[datetime]]):
-    def validate(self) -> None:
-        pass
+class TaskPriority(StrEnum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
+@dataclass(frozen=True)
+class TaskDueDate(ValueObject):
+    value: datetime

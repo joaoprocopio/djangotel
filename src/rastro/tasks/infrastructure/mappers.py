@@ -8,8 +8,8 @@ from rastro.tasks.domain.value_objects import (
     TaskStatus,
     TaskTitle,
 )
-from rastro_base.entity import Id
 from rastro_base.mapper import Mapper
+from rastro_shared_kernel.value_objects import Id
 
 if TYPE_CHECKING:
     from rastro.tasks.infrastructure.models import TaskModel as TaskModelType

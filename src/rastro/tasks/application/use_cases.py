@@ -1,5 +1,4 @@
 from rastro.tasks.application.dtos import CreateTaskInput, TaskOutput, UpdateTaskInput
-from rastro.tasks.domain.entities import Task
 from rastro.tasks.domain.errors import TaskNotFoundError, TaskPermissionError
 from rastro.tasks.domain.repository import TaskRepository
 from rastro.tasks.domain.value_objects import (
@@ -9,8 +8,8 @@ from rastro.tasks.domain.value_objects import (
     TaskStatus,
     TaskTitle,
 )
-from rastro_base.entity import Id
 from rastro_base.use_case import UseCase
+from rastro_shared_kernel.value_objects import Id
 
 
 class CreateTaskUseCase(UseCase[tuple[Id, CreateTaskInput], TaskOutput]):

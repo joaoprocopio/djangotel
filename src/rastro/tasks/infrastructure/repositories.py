@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from rastro.tasks.domain.entities import Task
 from rastro.tasks.domain.repository import TaskRepository
@@ -11,10 +11,7 @@ from rastro.tasks.domain.value_objects import (
 )
 from rastro.tasks.infrastructure.mappers import DjangoToDomainTaskMapper
 from rastro.tasks.infrastructure.models import TaskModel
-from rastro_base.entity import Id
-
-if TYPE_CHECKING:
-    pass
+from rastro_shared_kernel.value_objects import Id
 
 
 class DjangoTaskRepository(TaskRepository):

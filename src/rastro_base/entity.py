@@ -2,9 +2,6 @@ from abc import ABC
 from dataclasses import dataclass
 from typing import Generic, TypeVar, cast
 
-from rastro_base.error import InvalidIdError
-from rastro_base.value_object import ValueObject
-
 ID = TypeVar("ID")
 
 
@@ -21,9 +18,3 @@ class Entity(ABC, Generic[ID]):
 
     def __hash__(self) -> int:
         return hash(self.id)
-
-
-class Id(ValueObject[int]):
-    def validate(self) -> None:
-        if self.value < 1:
-            raise InvalidIdError()

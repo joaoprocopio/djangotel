@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
-from rastro_base.dto import DTO, FromJson
+from rastro_base.dto import DTO
+from rastro_shared_kernel.mixins import FromJson
 
 
 @dataclass(frozen=True)

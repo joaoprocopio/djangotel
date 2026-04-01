@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from rastro_base.dto import DTO, FromJson
+from rastro_base.dto import DTO
+from rastro_shared_kernel.mixins import FromJson
 
 
 @dataclass(frozen=True)
