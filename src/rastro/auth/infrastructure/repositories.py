@@ -10,7 +10,7 @@ from rastro.auth.domain.value_objects import (
     Username,
 )
 from rastro.auth.infrastructure.mappers import DjangoToDomainUserMapper
-from rastro_base.entity import Id
+from rastro_shared_kernel.value_objects import Id
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User as DjangoUser

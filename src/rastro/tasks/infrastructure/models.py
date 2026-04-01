@@ -4,16 +4,15 @@ from rastro.tasks.domain.value_objects import TaskPriority, TaskStatus
 
 
 class TaskModel(models.Model):
-    STATUS_CHOICES = [(status, status) for status in TaskStatus.VALID_STATUSES]
-    PRIORITY_CHOICES = [
-        (priority, priority) for priority in TaskPriority.VALID_PRIORITIES
-    ]
-
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="OPEN")
+    status = models.CharField(
+        choices=[(status.value, status.value.title()) for status in TaskStatus],
+        default=TaskStatus.OPEN,
+    )
     priority = models.CharField(
-        max_length=20, choices=PRIORITY_CHOICES, default="MEDIUM"
+        choices=[(priority.value, priority.value.title()) for priority in TaskPriority],
+        default=TaskPriority.MEDIUM,
     )
     due_date = models.DateTimeField(null=True, blank=True)
     owner_id = models.IntegerField()

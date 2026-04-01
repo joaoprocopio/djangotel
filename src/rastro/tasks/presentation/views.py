@@ -24,7 +24,7 @@ from rastro.tasks.domain.errors import (
 )
 from rastro.tasks.infrastructure.repositories import DjangoTaskRepository
 from rastro.tasks.presentation.presenters import TaskListPresenter, TaskPresenter
-from rastro_base.entity import Id
+from rastro_shared_kernel.value_objects import Id
 
 
 @method_decorator(csrf_exempt, name="dispatch")  # type: ignore[misc]
