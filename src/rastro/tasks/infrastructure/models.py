@@ -1,17 +1,18 @@
 from django.db import models
 
 from rastro.tasks.domain.value_objects import TaskPriority, TaskStatus
+from rastro_shared_kernel.utils import str_enum_to_choices
 
 
-class TaskModel(models.Model):
+class Task(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(
-        choices=[(status.value, status.value.title()) for status in TaskStatus],
+        choices=str_enum_to_choices(TaskStatus),
         default=TaskStatus.OPEN,
     )
     priority = models.CharField(
-        choices=[(priority.value, priority.value.title()) for priority in TaskPriority],
+        choices=str_enum_to_choices(TaskPriority),
         default=TaskPriority.MEDIUM,
     )
     due_date = models.DateTimeField(null=True, blank=True)

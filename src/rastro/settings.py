@@ -1,13 +1,13 @@
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from rastro.env import get_env, parse_booleanish, parse_csv
 
-try:
+if TYPE_CHECKING:
     import django_stubs_ext
 
     django_stubs_ext.monkeypatch()
-except ImportError:
-    pass
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from rastro.tasks.domain.entities import Task
 from rastro.tasks.domain.value_objects import (
     TaskDescription,
@@ -8,16 +6,14 @@ from rastro.tasks.domain.value_objects import (
     TaskStatus,
     TaskTitle,
 )
+from rastro.tasks.infrastructure.models import Task as DjangoTask
 from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id
 
-if TYPE_CHECKING:
-    from rastro.tasks.infrastructure.models import TaskModel as TaskModelType
 
-
-class DjangoToDomainTaskMapper(Mapper["TaskModelType", Task]):
+class DjangoToDomainTaskMapper(Mapper[DjangoTask, Task]):
     @staticmethod
-    def map(input: "TaskModelType") -> Task:
+    def map(input: DjangoTask) -> Task:
         return Task(
             id=Id(input.pk),
             title=TaskTitle(input.title),
@@ -30,12 +26,10 @@ class DjangoToDomainTaskMapper(Mapper["TaskModelType", Task]):
         )
 
 
-class DomainToDjangoTaskMapper(Mapper[Task, "TaskModelType"]):
+class DomainToDjangoTaskMapper(Mapper[Task, DjangoTask]):
     @staticmethod
-    def map(input: Task) -> "TaskModelType":
-        from rastro.tasks.infrastructure.models import TaskModel
-
-        return TaskModel(
+    def map(input: Task) -> DjangoTask:
+        return DjangoTask(
             id=input.id.value,
             title=input.title.value,
             description=input.description.value,

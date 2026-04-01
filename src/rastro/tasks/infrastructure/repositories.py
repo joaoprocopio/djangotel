@@ -10,7 +10,7 @@ from rastro.tasks.domain.value_objects import (
     TaskTitle,
 )
 from rastro.tasks.infrastructure.mappers import DjangoToDomainTaskMapper
-from rastro.tasks.infrastructure.models import TaskModel
+from rastro.tasks.infrastructure.models import Task as DjangoTask
 from rastro_shared_kernel.value_objects import Id
 
 
@@ -25,7 +25,7 @@ class DjangoTaskRepository(TaskRepository):
         owner_id: Id,
         assignee_id: Optional[Id],
     ) -> Task:
-        task_model = TaskModel.objects.create(  # type: ignore[misc]
+        task_model = DjangoTask.objects.create(  # type: ignore[misc]
             title=title.value,
             description=description.value,
             status=status.value,
@@ -39,19 +39,19 @@ class DjangoTaskRepository(TaskRepository):
 
     def get_by_id(self, id: Id) -> Optional[Task]:
         try:
-            task_model = TaskModel.objects.get(pk=id.value)  # type: ignore[misc]
+            task_model = DjangoTask.objects.get(pk=id.value)  # type: ignore[misc]
 
             return DjangoToDomainTaskMapper.map(task_model)
-        except TaskModel.DoesNotExist:
+        except Task.DoesNotExist:
             return None
 
     def list_by_owner(self, owner_id: Id) -> list[Task]:
-        task_models = TaskModel.objects.filter(owner_id=owner_id.value)  # type: ignore[misc]
+        task_models = DjangoTask.objects.filter(owner_id=owner_id.value)  # type: ignore[misc]
 
         return [DjangoToDomainTaskMapper.map(tm) for tm in task_models]
 
     def list_by_assignee(self, assignee_id: Id) -> list[Task]:
-        task_models = TaskModel.objects.filter(assignee_id=assignee_id.value)  # type: ignore[misc]
+        task_models = DjangoTask.objects.filter(assignee_id=assignee_id.value)  # type: ignore[misc]
 
         return [DjangoToDomainTaskMapper.map(tm) for tm in task_models]
 
@@ -65,7 +65,7 @@ class DjangoTaskRepository(TaskRepository):
         due_date: Optional[TaskDueDate] = None,
         assignee_id: Optional[Id] = None,
     ) -> Task:
-        task_model = TaskModel.objects.get(pk=id.value)  # type: ignore[misc]
+        task_model = DjangoTask.objects.get(pk=id.value)  # type: ignore[misc]
 
         if title is not None:
             task_model.title = title.value
@@ -85,4 +85,4 @@ class DjangoTaskRepository(TaskRepository):
         return DjangoToDomainTaskMapper.map(task_model)
 
     def delete(self, id: Id) -> None:
-        TaskModel.objects.filter(pk=id.value).delete()  # type: ignore[misc]
+        DjangoTask.objects.filter(pk=id.value).delete()  # type: ignore[misc]

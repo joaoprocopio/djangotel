@@ -4,7 +4,7 @@ from dataclasses import fields
 from typing import Self
 
 
-class FromJson:
+class FromJson(ABC):
     @classmethod
     def from_json(cls, value: str | bytes | bytearray) -> Self:
         data = json.loads(value)  # type: ignore
