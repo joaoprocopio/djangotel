@@ -17,7 +17,7 @@ from rastro.auth.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
 )
-from rastro.auth.presentation.presenters import UserPresenter
+from rastro.auth.presenters import UserPresenter
 
 
 @method_decorator(ensure_csrf_cookie, name="get")  # type: ignore

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from rastro.tasks.presentation import views
+from rastro.tasks import views
 
 urlpatterns = [
     path("", views.TaskListView.as_view()),  # type: ignore

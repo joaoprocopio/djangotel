@@ -1,7 +1,7 @@
 # urls.py
 from django.urls import path
 
-from rastro.auth.presentation import views
+from rastro.auth import views
 
 urlpatterns = [
     path("me", views.MeView.as_view()),  # type: ignore

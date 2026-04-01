@@ -10,7 +10,7 @@ from rastro.tasks.domain.value_objects import (
     TaskTitle,
 )
 from rastro.tasks.infrastructure.mappers import DjangoToDomainTaskMapper
-from rastro.tasks.infrastructure.models import Task as DjangoTask
+from rastro.tasks.models import Task as DjangoTask
 from rastro_shared_kernel.value_objects import Id
 
 

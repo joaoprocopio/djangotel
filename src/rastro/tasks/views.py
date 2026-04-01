@@ -23,7 +23,7 @@ from rastro.tasks.domain.errors import (
     TaskPermissionError,
 )
 from rastro.tasks.infrastructure.repositories import DjangoTaskRepository
-from rastro.tasks.presentation.presenters import TaskListPresenter, TaskPresenter
+from rastro.tasks.presenters import TaskListPresenter, TaskPresenter
 from rastro_shared_kernel.value_objects import Id
 
 

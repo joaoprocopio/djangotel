@@ -6,7 +6,7 @@ from rastro.tasks.domain.value_objects import (
     TaskStatus,
     TaskTitle,
 )
-from rastro.tasks.infrastructure.models import Task as DjangoTask
+from rastro.tasks.models import Task as DjangoTask
 from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id
 
