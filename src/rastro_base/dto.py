@@ -1,4 +1,9 @@
-from abc import ABC
+from pydantic import BaseModel, ConfigDict
 
 
-class DTO(ABC): ...
+class DTO(BaseModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        populate_by_name=True,
+    )

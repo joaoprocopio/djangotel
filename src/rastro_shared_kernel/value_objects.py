@@ -1,4 +1,7 @@
-from pydantic.root_model import RootModel
+from pydantic import PositiveInt
+
+from rastro_base.value_object import ValueObject
 
 
-class Id(RootModel[int]): ...
+class Id(ValueObject):
+    value: PositiveInt
