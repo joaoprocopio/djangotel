@@ -38,7 +38,3 @@ class BaseError(Exception):
             raise TypeError(f"Code must be UPPER_SNAKE_CASE: {code}")
 
         cls._registry.add(code)
-
-
-class InvalidIdError(BaseError):
-    code = "BASE_INVALID_ID"

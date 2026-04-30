@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from rastro.env import get_env, parse_booleanish, parse_csv
+from rastro_shared_kernel.env import get_env, parse_booleanish, parse_csv
 
 if TYPE_CHECKING:
     import django_stubs_ext
