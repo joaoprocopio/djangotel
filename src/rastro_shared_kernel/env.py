@@ -51,6 +51,7 @@ def get_env(
     if value is None:
         if parser is not None and default is not None:
             return parser(default)
+
         return default
 
     if parser is not None:
@@ -64,12 +65,12 @@ def parse_csv(raw_value: str) -> list[str]:
 
 
 def parse_booleanish(raw_value: str) -> bool:
-    value = raw_value.lower()
+    value = raw_value.strip().lower()
 
-    if value == "true" or value == "1":
-        return True
-
-    if value == "false" or value == "0":
-        return False
+    match value:
+        case "true" | "1":
+            return True
+        case "false" | "0":
+            return False
 
     raise TypeError(f"Could not parse {raw_value} as booleanish value.")

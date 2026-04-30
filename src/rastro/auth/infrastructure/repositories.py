@@ -20,9 +20,9 @@ class DjangoUserRepository(UserRepository):
         self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> User:
         django_user = DjangoUser.objects.create(
-            username=username.value,
-            email=email.value,
-            password=hashed_password.value,
+            username=username.root,
+            email=email.root,
+            password=hashed_password.root,
         )
         django_user.save()
 
@@ -30,7 +30,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_id(self, id: Id) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(pk=id.value)
+            django_user = DjangoUser.objects.get(pk=id.root)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -38,7 +38,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_email(self, email: Email) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(email=email.value)
+            django_user = DjangoUser.objects.get(email=email.root)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -46,7 +46,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_username(self, username: Username) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(username=username.value)
+            django_user = DjangoUser.objects.get(username=username.root)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
