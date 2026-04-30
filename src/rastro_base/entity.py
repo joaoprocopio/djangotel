@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, cast
 
 from pydantic import BaseModel
 
@@ -11,7 +11,7 @@ class Entity(BaseModel, Generic[ID]):
     def __eq__(self, other: object) -> bool:
         if type(other) is not type(self):
             return NotImplemented
-        return bool(self.id == other.id)
+        return bool(self.id == cast(Entity[ID], other).id)
 
     def __hash__(self) -> int:
         return hash(self.id)
