@@ -37,7 +37,7 @@ class DjangoSessionService(SessionService):
 
 class DjangoPasswordHashingService(PasswordHashingService):
     def hash(self, raw_password: RawPassword) -> HashedPassword:
-        return HashedPassword(make_password(raw_password.value))
+        return HashedPassword(value=make_password(raw_password.value))
 
     def verify(
         self, raw_password: RawPassword, hashed_password: HashedPassword

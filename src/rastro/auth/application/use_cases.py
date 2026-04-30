@@ -28,12 +28,12 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
         self.password_hashing_service = password_hashing_service
 
     def execute(self, input: SignUpInput) -> UserOutput:
-        raw_password = RawPassword(input.password).validate()
+        raw_password = RawPassword(value=input.password)
         hashed_password = self.password_hashing_service.hash(raw_password)
 
         user = self.repository.create(
-            username=Username(input.username).validate().normalize(),
-            email=Email(input.email).validate().normalize(),
+            username=Username(value=input.username),
+            email=Email(value=input.email),
             hashed_password=hashed_password,
         )
 
@@ -50,15 +50,15 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         self.password_hashing_service = password_hashing_service
 
     def execute(self, input: SignInInput) -> UserOutput:
-        if "@" in input.query:
-            user = self.repository.get_by_email(Email(input.query))
+        if "@" in input.query.value:
+            user = self.repository.get_by_email(Email(value=input.query))
         else:
-            user = self.repository.get_by_username(Username(input.query))
+            user = self.repository.get_by_username(Username(value=input.query))
 
         if user is None:
             raise UserNotFoundError()
 
-        raw_password = RawPassword(input.password)
+        raw_password = RawPassword(value=input.password)
 
         if not self.password_hashing_service.verify(raw_password, user.hashed_password):
             raise AuthenticationError()

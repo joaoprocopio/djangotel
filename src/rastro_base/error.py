@@ -26,10 +26,10 @@ class BaseError(Exception):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
 
-        if "code" not in cls.__dict__:  # type: ignore
+        if "code" not in cls.__dict__:
             raise TypeError(f"{cls.__name__} must define 'code' attribute")
 
-        code: str = cls.__dict__["code"]  # type: ignore
+        code: str = cls.__dict__["code"]
 
         if code in cls._registry:
             raise ValueError(f"Duplicate error code: {code}")

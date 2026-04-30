@@ -55,7 +55,6 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     "rastro.auth",
-    "rastro.tasks",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS

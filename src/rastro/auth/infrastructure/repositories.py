@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from django.contrib.auth import get_user_model
 
@@ -12,17 +12,14 @@ from rastro.auth.domain.value_objects import (
 from rastro.auth.infrastructure.mappers import DjangoToDomainUserMapper
 from rastro_shared_kernel.value_objects import Id
 
-if TYPE_CHECKING:
-    from django.contrib.auth.models import User as DjangoUser
-else:
-    DjangoUser = get_user_model()
+DjangoUser = get_user_model()
 
 
 class DjangoUserRepository(UserRepository):
     def create(
         self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> User:
-        django_user = DjangoUser.objects.create(  # type: ignore
+        django_user = DjangoUser.objects.create(
             username=username.value,
             email=email.value,
             password=hashed_password.value,
@@ -33,7 +30,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_id(self, id: Id) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(pk=id.value)  # type: ignore
+            django_user = DjangoUser.objects.get(pk=id.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -41,7 +38,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_email(self, email: Email) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(email=email.value)  # type: ignore
+            django_user = DjangoUser.objects.get(email=email.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
@@ -49,7 +46,7 @@ class DjangoUserRepository(UserRepository):
 
     def get_by_username(self, username: Username) -> Optional[User]:
         try:
-            django_user = DjangoUser.objects.get(username=username.value)  # type: ignore
+            django_user = DjangoUser.objects.get(username=username.value)
 
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:

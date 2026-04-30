@@ -17,6 +17,7 @@ dependencies = [
     "opentelemetry-instrumentation-logging>=0.61b0",
     "opentelemetry-sdk>=1.40.0",
     "psycopg2>=2.9.11",
+    "pydantic>=2.13.3",
 ]
 
 [dependency-groups]

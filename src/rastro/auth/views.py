@@ -1,7 +1,7 @@
 # views.py
 from http import HTTPStatus
 
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -18,7 +18,6 @@ from rastro.auth.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
 )
-from rastro_shared_kernel.constants import CONTENT_TYPE_JSON
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
@@ -30,10 +29,9 @@ class MeView(View):
         if user is None:
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
-        return HttpResponse(
-            DomainToPublicUserMapper.map(user).model_dump_json(),
+        return JsonResponse(
+            DomainToPublicUserMapper.map(user).model_dump(),
             status=HTTPStatus.OK,
-            content_type=CONTENT_TYPE_JSON,
         )
 
 
@@ -50,10 +48,9 @@ class SignInView(View):
 
         session_service.login(OutputToDomainUserMapper.map(output))
 
-        return HttpResponse(
-            OutputToPublicUserMapper.map(output).model_dump_json(),
+        return JsonResponse(
+            OutputToPublicUserMapper.map(output).model_dump(),
             status=HTTPStatus.OK,
-            content_type=CONTENT_TYPE_JSON,
         )
 
 
@@ -70,10 +67,9 @@ class SignUpView(View):
 
         session_service.login(OutputToDomainUserMapper.map(output))
 
-        return HttpResponse(
-            OutputToPublicUserMapper.map(output).model_dump_json(),
+        return JsonResponse(
+            OutputToPublicUserMapper.map(output).model_dump(),
             status=HTTPStatus.CREATED,
-            content_type=CONTENT_TYPE_JSON,
         )
 
 

@@ -14,4 +14,4 @@ class ValueObject(BaseModel):
     def __eq__(self, other: object) -> bool:
         if type(other) is not type(self):
             return NotImplemented
-        return hash(self) == hash(other)
+        return hash(self) == hash(self.model_dump)

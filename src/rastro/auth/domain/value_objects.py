@@ -2,7 +2,7 @@ import re
 import unicodedata
 from typing import Annotated
 
-from pydantic import StringConstraints, WrapValidator
+from pydantic import AfterValidator, StringConstraints
 
 from rastro_base.value_object import ValueObject
 
@@ -21,7 +21,7 @@ class Email(ValueObject):
 class Username(ValueObject):
     value: Annotated[
         str,
-        WrapValidator(lambda value: unicodedata.normalize("NFKC", value)),
+        AfterValidator(lambda val: unicodedata.normalize("NFKC", val)),
         StringConstraints(pattern=UNICODE_USERNAME_PATTERN),
     ]
 
