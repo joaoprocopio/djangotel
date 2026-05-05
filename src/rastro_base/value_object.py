@@ -1,19 +1,8 @@
 from typing import TypeVar
 
-from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic import ConfigDict
 
-
-class ValueObject(BaseModel):
-    model_config = ConfigDict(frozen=True)
-
-    def __hash__(self) -> int:
-        return hash(tuple(sorted(self.model_dump().items())))
-
-    def __eq__(self, other: object) -> bool:
-        if type(other) is not type(self):
-            return NotImplemented
-        return hash(self) == hash(self.model_dump)
-
+from rastro_base.pydantic import BaseModel, RootModel
 
 T = TypeVar("T")
 
@@ -21,10 +10,6 @@ T = TypeVar("T")
 class RootValueObject(RootModel[T]):
     model_config = ConfigDict(frozen=True)
 
-    def __hash__(self) -> int:
-        return hash(tuple(sorted(self.model_dump().items())))
 
-    def __eq__(self, other: object) -> bool:
-        if type(other) is not type(self):
-            return NotImplemented
-        return hash(self) == hash(self.model_dump)
+class ValueObject(BaseModel):
+    model_config = ConfigDict(frozen=True)

@@ -6,5 +6,5 @@ from rastro_shared_kernel.value_objects import Id
 class User(Entity[Id]):
     username: Username
     email: Email
-    hashed_password: HashedPassword
+    password: HashedPassword
     is_active: bool

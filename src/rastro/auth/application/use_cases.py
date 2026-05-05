@@ -57,9 +57,7 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         if user is None:
             raise UserNotFoundError()
 
-        if not self.password_hashing_service.verify(
-            input.password, user.hashed_password
-        ):
+        if not self.password_hashing_service.verify(input.password, user.password):
             raise AuthenticationError()
 
         return DomainToOutputUserMapper.map(user)
