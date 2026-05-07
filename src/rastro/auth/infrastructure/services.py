@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.contrib import auth
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.hashers import make_password, verify_password
 from django.http import HttpRequest
 
 from rastro.auth.domain.entities import User
@@ -41,5 +41,5 @@ class DjangoPasswordHashingService(PasswordHashingService):
 
     def verify(
         self, raw_password: RawPassword, hashed_password: HashedPassword
-    ) -> bool:
-        return check_password(raw_password.root, hashed_password.root)
+    ) -> tuple[bool, bool]:
+        return verify_password(raw_password.root, hashed_password.root)

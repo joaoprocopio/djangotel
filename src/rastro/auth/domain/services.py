@@ -13,7 +13,7 @@ class PasswordHashingService(Service):
     @abstractmethod
     def verify(
         self, raw_password: RawPassword, hashed_password: HashedPassword
-    ) -> bool: ...
+    ) -> tuple[bool, bool]: ...
 
 
 class SessionService(Service):

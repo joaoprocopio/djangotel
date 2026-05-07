@@ -23,9 +23,16 @@ class User(AggregateRoot):
     ) -> None:
         self.password = password_hashing_service.hash(raw_password)
 
-    def check_password(
+    def verify_password(
         self,
         raw_password: RawPassword,
         password_hashing_service: PasswordHashingService,
-    ) -> bool:
-        return password_hashing_service.verify(raw_password, self.password)
+    ) -> tuple[bool, bool]:
+        is_password_correct, must_upgrade_hash = password_hashing_service.verify(
+            raw_password, self.password
+        )
+
+        if must_upgrade_hash:
+            self.set_password(raw_password, password_hashing_service)
+
+        return is_password_correct, must_upgrade_hash
