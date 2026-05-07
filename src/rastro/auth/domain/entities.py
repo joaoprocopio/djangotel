@@ -30,7 +30,7 @@ class User(AggregateRoot):
     ) -> PasswordVerification:
         verification = password_hashing_service.verify(raw_password, self.password)
 
-        if verification.must_upgrade:
+        if verification.is_correct and verification.must_upgrade:
             self.set_password(raw_password, password_hashing_service)
 
         return verification
