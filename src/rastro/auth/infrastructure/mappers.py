@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import get_user_model
 
 from rastro.auth.application.dtos import UserOutput, UserPublic
-from rastro.auth.domain.entities import User
+from rastro.auth.domain.aggregates import User
 from rastro.auth.domain.value_objects import Email, HashedPassword, Username
 from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from rastro.auth.domain.entities import User
+from rastro.auth.domain.aggregates import User
 from rastro.auth.domain.value_objects import Email, HashedPassword, Username
 from rastro_shared_kernel.value_objects import Id
 

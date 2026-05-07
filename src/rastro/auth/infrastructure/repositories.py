@@ -2,7 +2,7 @@ from typing import Optional
 
 from django.contrib.auth import get_user_model
 
-from rastro.auth.domain.entities import User
+from rastro.auth.domain.aggregates import User
 from rastro.auth.domain.repository import UserRepository
 from rastro.auth.domain.value_objects import (
     Email,

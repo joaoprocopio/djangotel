@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password, verify_password
 from django.http import HttpRequest
 
-from rastro.auth.domain.entities import User
+from rastro.auth.domain.aggregates import User
 from rastro.auth.domain.services import (
     PasswordHashingService,
     PasswordVerification,

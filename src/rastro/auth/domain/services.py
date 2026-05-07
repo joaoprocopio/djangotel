@@ -1,9 +1,11 @@
 from abc import abstractmethod
-from typing import NamedTuple, Optional
+from typing import TYPE_CHECKING, NamedTuple, Optional
 
-from rastro.auth.domain.entities import User
-from rastro.auth.domain.value_objects import HashedPassword, RawPassword
 from rastro_base.service import Service
+
+if TYPE_CHECKING:
+    from rastro.auth.domain.aggregates import User
+    from rastro.auth.domain.value_objects import HashedPassword, RawPassword
 
 
 class PasswordVerification(NamedTuple):
