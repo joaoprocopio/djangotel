@@ -1,9 +1,14 @@
 from abc import abstractmethod
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from rastro.auth.domain.entities import User
 from rastro.auth.domain.value_objects import HashedPassword, RawPassword
 from rastro_base.service import Service
+
+
+class PasswordVerification(NamedTuple):
+    is_correct: bool
+    must_upgrade: bool
 
 
 class PasswordHashingService(Service):
@@ -13,7 +18,7 @@ class PasswordHashingService(Service):
     @abstractmethod
     def verify(
         self, raw_password: RawPassword, hashed_password: HashedPassword
-    ) -> tuple[bool, bool]: ...
+    ) -> PasswordVerification: ...
 
 
 class SessionService(Service):

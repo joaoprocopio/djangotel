@@ -57,11 +57,11 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         if user is None:
             raise UserNotFoundError()
 
-        is_password_correct, has_upgraded_hash = user.verify_password(
+        verification = user.verify_password(
             input.password, self.password_hashing_service
         )
 
-        if not is_password_correct:
+        if not verification.is_correct:
             raise AuthenticationError()
 
         # if has_upgraded_hash:

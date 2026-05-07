@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from rastro.auth.domain.entities import User
 from rastro.auth.domain.services import (
     PasswordHashingService,
+    PasswordVerification,
     SessionService,
 )
 from rastro.auth.domain.value_objects import HashedPassword, RawPassword
@@ -41,5 +42,9 @@ class DjangoPasswordHashingService(PasswordHashingService):
 
     def verify(
         self, raw_password: RawPassword, hashed_password: HashedPassword
-    ) -> tuple[bool, bool]:
-        return verify_password(raw_password.root, hashed_password.root)
+    ) -> PasswordVerification:
+        is_correct, must_upgrade = verify_password(
+            raw_password.root, hashed_password.root
+        )
+
+        return PasswordVerification(is_correct=is_correct, must_upgrade=must_upgrade)
