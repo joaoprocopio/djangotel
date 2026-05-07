@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rastro.auth.domain.services import PasswordHashingService, PasswordVerification
 from rastro.auth.domain.value_objects import (
     Email,
@@ -14,7 +16,13 @@ class User(AggregateRoot):
     username: Username
     email: Email
     password: HashedPassword
+    first_name: str
+    last_name: str
+    date_joined: datetime
+    last_login: datetime
     is_active: bool
+    is_staff: bool
+    is_superuser: bool
 
     def set_password(
         self,
