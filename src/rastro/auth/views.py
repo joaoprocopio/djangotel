@@ -10,7 +10,6 @@ from rastro.auth.application.dtos import SignInInput, SignUpInput
 from rastro.auth.application.use_cases import SignInUseCase, SignUpUseCase
 from rastro.auth.infrastructure.mappers import (
     DomainToPublicUserMapper,
-    OutputToDomainUserMapper,
     OutputToPublicUserMapper,
 )
 from rastro.auth.infrastructure.repositories import DjangoUserRepository
@@ -40,13 +39,13 @@ class SignInView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
-        sign_in_use_case = SignInUseCase(repository, password_hashing_service)
         session_service = DjangoSessionService(request)
+        sign_in_use_case = SignInUseCase(
+            repository, session_service, password_hashing_service
+        )
 
         input = SignInInput.model_validate_json(request.body)
         output = sign_in_use_case.execute(input)
-
-        session_service.login(OutputToDomainUserMapper.map(output))
 
         return JsonResponse(
             OutputToPublicUserMapper.map(output).model_dump(),
@@ -59,13 +58,13 @@ class SignUpView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
-        sign_up_use_case = SignUpUseCase(repository, password_hashing_service)
         session_service = DjangoSessionService(request)
+        sign_up_use_case = SignUpUseCase(
+            repository, session_service, password_hashing_service
+        )
 
         input = SignUpInput.model_validate_json(request.body)
         output = sign_up_use_case.execute(input)
-
-        session_service.login(OutputToDomainUserMapper.map(output))
 
         return JsonResponse(
             OutputToPublicUserMapper.map(output).model_dump(),

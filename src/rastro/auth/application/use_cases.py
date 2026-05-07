@@ -8,12 +8,14 @@ from rastro.auth.domain.errors import (
     UserNotFoundError,
 )
 from rastro.auth.domain.repository import UserRepository
-from rastro.auth.domain.services import PasswordHashingService
+from rastro.auth.domain.services import PasswordHashingService, SessionService
 from rastro.auth.domain.value_objects import (
     Email,
     Username,
 )
-from rastro.auth.infrastructure.mappers import DomainToOutputUserMapper
+from rastro.auth.infrastructure.mappers import (
+    DomainToOutputUserMapper,
+)
 from rastro_base.use_case import UseCase
 
 
@@ -21,9 +23,11 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
     def __init__(
         self,
         repository: UserRepository,
+        session_service: SessionService,
         password_hashing_service: PasswordHashingService,
     ):
         self.repository = repository
+        self.session_service = session_service
         self.password_hashing_service = password_hashing_service
 
     def execute(self, input: SignUpInput) -> UserOutput:
@@ -35,6 +39,8 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
             hashed_password=hashed_password,
         )
 
+        self.session_service.login(user)
+
         return DomainToOutputUserMapper.map(user)
 
 
@@ -42,9 +48,11 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
     def __init__(
         self,
         repository: UserRepository,
+        session_service: SessionService,
         password_hashing_service: PasswordHashingService,
     ):
         self.repository = repository
+        self.session_service = session_service
         self.password_hashing_service = password_hashing_service
 
     def execute(self, input: SignInInput) -> UserOutput:
@@ -66,5 +74,7 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
 
         if verification.must_upgrade:
             self.repository.update_password(user)
+
+        self.session_service.login(user)
 
         return DomainToOutputUserMapper.map(user)
