@@ -15,9 +15,7 @@ class Email(
     RootValueObject[
         Annotated[
             str,
-            StringConstraints(
-                to_lower=True, strip_whitespace=True, pattern=EMAIL_PATTERN
-            ),
+            StringConstraints(to_lower=True, pattern=EMAIL_PATTERN),
         ]
     ]
 ): ...
@@ -38,7 +36,7 @@ class RawPassword(
     RootValueObject[
         Annotated[
             str,
-            StringConstraints(min_length=8),
+            StringConstraints(strip_whitespace=False, min_length=8),
         ]
     ]
 ): ...

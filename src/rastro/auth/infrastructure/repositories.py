@@ -25,6 +25,7 @@ class DjangoUserRepository(UserRepository):
             password=hashed_password.root,
         )
         django_user.save()
+        django_user.refresh_from_db()
 
         return DjangoToDomainUserMapper.map(django_user)
 
