@@ -9,7 +9,10 @@ from rastro.auth.domain.value_objects import (
     HashedPassword,
     Username,
 )
-from rastro.auth.infrastructure.mappers import DjangoToDomainUserMapper
+from rastro.auth.infrastructure.mappers import (
+    DjangoToDomainUserMapper,
+    DomainToDjangoUserMapper,
+)
 from rastro_shared_kernel.value_objects import Id
 
 DjangoUser = get_user_model()
@@ -49,6 +52,13 @@ class DjangoUserRepository(UserRepository):
         try:
             django_user = DjangoUser.objects.get(username=username.root)
 
+            django_user.check_password
             return DjangoToDomainUserMapper.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
+
+    def update_password(self, user: User) -> User:
+        django_user = DomainToDjangoUserMapper.map(user)
+        django_user.save(update_fields=["password"])
+
+        return DjangoToDomainUserMapper.map(django_user)

@@ -65,7 +65,6 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
             raise AuthenticationError()
 
         if verification.must_upgrade:
-            pass
-            # self.repository.update(user)
+            self.repository.update_password(user)
 
         return DomainToOutputUserMapper.map(user)

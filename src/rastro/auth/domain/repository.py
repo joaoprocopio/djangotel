@@ -20,3 +20,6 @@ class UserRepository(ABC):
 
     @abstractmethod
     def get_by_username(self, username: Username) -> Optional[User]: ...
+
+    @abstractmethod
+    def update_password(self, user: User) -> User: ...
