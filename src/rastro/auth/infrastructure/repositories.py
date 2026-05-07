@@ -17,12 +17,12 @@ DjangoUser = get_user_model()
 
 class DjangoUserRepository(UserRepository):
     def create(
-        self, username: Username, email: Email, hashed_password: HashedPassword
+        self, username: Username, email: Email, password: HashedPassword
     ) -> User:
         django_user = DjangoUser.objects.create(
             username=username.root,
             email=email.root,
-            password=hashed_password.root,
+            password=password.root,
         )
         django_user.save()
         django_user.refresh_from_db()

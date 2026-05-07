@@ -18,7 +18,8 @@ class Email(
             StringConstraints(to_lower=True, pattern=EMAIL_PATTERN),
         ]
     ]
-): ...
+):
+    pass
 
 
 class Username(
@@ -29,7 +30,8 @@ class Username(
             StringConstraints(pattern=UNICODE_USERNAME_PATTERN),
         ]
     ]
-): ...
+):
+    pass
 
 
 class RawPassword(
@@ -39,7 +41,9 @@ class RawPassword(
             StringConstraints(strip_whitespace=False, min_length=8),
         ]
     ]
-): ...
+):
+    pass
 
 
-class HashedPassword(RootValueObject[str]): ...
+class HashedPassword(RootValueObject[str]):
+    pass

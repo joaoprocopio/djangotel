@@ -1,4 +1,5 @@
 from abc import ABC
 
 
-class Service(ABC): ...
+class Service(ABC):
+    pass

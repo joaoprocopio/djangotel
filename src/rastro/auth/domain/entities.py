@@ -1,10 +1,31 @@
-from rastro.auth.domain.value_objects import Email, HashedPassword, Username
-from rastro_base.entity import Entity
+from rastro.auth.domain.services import PasswordHashingService
+from rastro.auth.domain.value_objects import (
+    Email,
+    HashedPassword,
+    RawPassword,
+    Username,
+)
+from rastro_base.aggregate import AggregateRoot
 from rastro_shared_kernel.value_objects import Id
 
 
-class User(Entity[Id]):
+class User(AggregateRoot):
+    id: Id
     username: Username
     email: Email
     password: HashedPassword
     is_active: bool
+
+    def set_password(
+        self,
+        raw_password: RawPassword,
+        password_hashing_service: PasswordHashingService,
+    ) -> None:
+        self.password = password_hashing_service.hash(raw_password)
+
+    def check_password(
+        self,
+        raw_password: RawPassword,
+        password_hashing_service: PasswordHashingService,
+    ) -> bool:
+        return password_hashing_service.verify(raw_password, self.password)
