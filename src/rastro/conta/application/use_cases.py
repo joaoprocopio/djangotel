@@ -1,7 +1,7 @@
 from rastro.conta.application.dtos import (
-    SignInInput,
-    SignUpInput,
-    UserOutput,
+    CadastrarInput,
+    ContaOutput,
+    EntrarInput,
 )
 from rastro.conta.domain.errors import (
     AuthenticationError,
@@ -19,7 +19,7 @@ from rastro.conta.presentation.mappers import (
 from rastro_base.use_case import UseCase
 
 
-class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
+class CadastrarUseCase(UseCase[CadastrarInput, ContaOutput]):
     def __init__(
         self,
         repository: UserRepository,
@@ -30,7 +30,7 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
         self.session_service = session_service
         self.password_hashing_service = password_hashing_service
 
-    def execute(self, input: SignUpInput) -> UserOutput:
+    def execute(self, input: CadastrarInput) -> ContaOutput:
         hashed_password = self.password_hashing_service.hash(input.password)
 
         user = self.repository.create(
@@ -44,7 +44,7 @@ class SignUpUseCase(UseCase[SignUpInput, UserOutput]):
         return DomainToOutputUserMapper.map(user)
 
 
-class SignInUseCase(UseCase[SignInInput, UserOutput]):
+class EntrarUseCase(UseCase[EntrarInput, ContaOutput]):
     def __init__(
         self,
         repository: UserRepository,
@@ -55,7 +55,7 @@ class SignInUseCase(UseCase[SignInInput, UserOutput]):
         self.session_service = session_service
         self.password_hashing_service = password_hashing_service
 
-    def execute(self, input: SignInInput) -> UserOutput:
+    def execute(self, input: EntrarInput) -> ContaOutput:
         match input.query:
             case Email():
                 user = self.repository.get_by_email(input.query)

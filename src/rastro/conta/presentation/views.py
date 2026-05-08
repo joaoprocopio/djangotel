@@ -5,8 +5,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from rastro.conta.application.dtos import SignInInput, SignUpInput
-from rastro.conta.application.use_cases import SignInUseCase, SignUpUseCase
+from rastro.conta.application.dtos import CadastrarInput, EntrarInput
+from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
 from rastro.conta.infrastructure.repositories import DjangoUserRepository
 from rastro.conta.infrastructure.services import (
     DjangoPasswordHashingService,
@@ -38,16 +38,16 @@ class ContaView(View):
         )
 
 
-class SignInView(View):
+class EntrarView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
         session_service = DjangoSessionService(request)
-        sign_in_use_case = SignInUseCase(
+        sign_in_use_case = EntrarUseCase(
             repository, session_service, password_hashing_service
         )
 
-        input = SignInInput.model_validate_json(request.body)
+        input = EntrarInput.model_validate_json(request.body)
         output = sign_in_use_case.execute(input)
 
         return JsonResponse(
@@ -56,16 +56,16 @@ class SignInView(View):
         )
 
 
-class SignUpView(View):
+class CadastrarView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
         session_service = DjangoSessionService(request)
-        sign_up_use_case = SignUpUseCase(
+        sign_up_use_case = CadastrarUseCase(
             repository, session_service, password_hashing_service
         )
 
-        input = SignUpInput.model_validate_json(request.body)
+        input = CadastrarInput.model_validate_json(request.body)
         output = sign_up_use_case.execute(input)
 
         return JsonResponse(
@@ -74,7 +74,7 @@ class SignUpView(View):
         )
 
 
-class SignOutView(View):
+class SairView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         session_service = DjangoSessionService(request)
         user = session_service.logged_user()

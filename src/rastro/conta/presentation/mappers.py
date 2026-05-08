@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth import get_user_model
 
-from rastro.conta.application.dtos import UserOutput, UserPublic
+from rastro.conta.application.dtos import ContaOutput, ContaPublic
 from rastro.conta.domain.aggregates import User
 from rastro.conta.domain.value_objects import Email, HashedPassword, Username
 from rastro_base.mapper import Mapper
@@ -38,9 +38,9 @@ class DomainToDjangoUserMapper(Mapper[User, DjangoUser]):
         )
 
 
-class OutputToDomainUserMapper(Mapper[UserOutput, User]):
+class OutputToDomainUserMapper(Mapper[ContaOutput, User]):
     @staticmethod
-    def map(input: UserOutput) -> User:
+    def map(input: ContaOutput) -> User:
         return User(
             id=input.id,
             username=input.username,
@@ -50,19 +50,19 @@ class OutputToDomainUserMapper(Mapper[UserOutput, User]):
         )
 
 
-class OutputToPublicUserMapper(Mapper[UserOutput, UserPublic]):
+class OutputToPublicUserMapper(Mapper[ContaOutput, ContaPublic]):
     @staticmethod
-    def map(input: UserOutput) -> UserPublic:
-        return UserPublic(
+    def map(input: ContaOutput) -> ContaPublic:
+        return ContaPublic(
             email=input.email,
             username=input.username,
         )
 
 
-class DomainToOutputUserMapper(Mapper[User, UserOutput]):
+class DomainToOutputUserMapper(Mapper[User, ContaOutput]):
     @staticmethod
-    def map(input: User) -> UserOutput:
-        return UserOutput(
+    def map(input: User) -> ContaOutput:
+        return ContaOutput(
             id=input.id.root,
             email=input.email.root,
             username=input.username.root,
@@ -71,10 +71,10 @@ class DomainToOutputUserMapper(Mapper[User, UserOutput]):
         )
 
 
-class DomainToPublicUserMapper(Mapper[User, UserPublic]):
+class DomainToPublicUserMapper(Mapper[User, ContaPublic]):
     @staticmethod
-    def map(input: User) -> UserPublic:
-        return UserPublic(
+    def map(input: User) -> ContaPublic:
+        return ContaPublic(
             email=input.email.root,
             username=input.username.root,
         )

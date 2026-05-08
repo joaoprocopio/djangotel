@@ -8,18 +8,18 @@ from rastro_base.dto import DTO
 from rastro_shared_kernel.value_objects import Id
 
 
-class SignUpInput(DTO):
+class CadastrarInput(DTO):
     username: Username
     email: Email
     password: RawPassword
 
 
-class SignInInput(DTO):
+class EntrarInput(DTO):
     query: Email | Username
     password: RawPassword
 
 
-class UserOutput(DTO):
+class ContaOutput(DTO):
     id: Id
     email: Email
     username: Username
@@ -27,6 +27,6 @@ class UserOutput(DTO):
     is_active: bool
 
 
-class UserPublic(DTO):
+class ContaPublic(DTO):
     email: Email
     username: Username
