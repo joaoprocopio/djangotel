@@ -14,7 +14,7 @@ else:
     DjangoUser = get_user_model()
 
 
-class DehydrateUser(Mapper[DjangoUser, Conta]):
+class HydrateConta(Mapper[DjangoUser, Conta]):
     @staticmethod
     def map(input: DjangoUser) -> Conta:
         return Conta(
@@ -22,11 +22,17 @@ class DehydrateUser(Mapper[DjangoUser, Conta]):
             username=Username(input.username),
             email=Email(input.email),
             password=HashedPassword(input.password),
+            first_name=input.first_name,
+            last_name=input.last_name,
+            date_joined=input.date_joined,
+            last_login=input.last_login,
+            is_superuser=input.is_superuser,
+            is_staff=input.is_staff,
             is_active=input.is_active,
         )
 
 
-class DomainToDjangoUserMapper(Mapper[Conta, DjangoUser]):
+class DehydrateConta(Mapper[Conta, DjangoUser]):
     @staticmethod
     def map(input: Conta) -> DjangoUser:
         return DjangoUser(
