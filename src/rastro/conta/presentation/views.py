@@ -43,12 +43,12 @@ class EntrarView(View):
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
         session_service = DjangoSessionService(request)
-        sign_in_use_case = EntrarUseCase(
+        entrar_use_case = EntrarUseCase(
             repository, session_service, password_hashing_service
         )
 
         input = EntrarInput.model_validate_json(request.body)
-        output = sign_in_use_case.execute(input)
+        output = entrar_use_case.execute(input)
 
         return JsonResponse(
             OutputToPublicUserMapper.map(output).model_dump(),
@@ -61,12 +61,12 @@ class CadastrarView(View):
         repository = DjangoUserRepository()
         password_hashing_service = DjangoPasswordHashingService()
         session_service = DjangoSessionService(request)
-        sign_up_use_case = CadastrarUseCase(
+        cadastrar_use_case = CadastrarUseCase(
             repository, session_service, password_hashing_service
         )
 
         input = CadastrarInput.model_validate_json(request.body)
-        output = sign_up_use_case.execute(input)
+        output = cadastrar_use_case.execute(input)
 
         return JsonResponse(
             OutputToPublicUserMapper.map(output).model_dump(),
