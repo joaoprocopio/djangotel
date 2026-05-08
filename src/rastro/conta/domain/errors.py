@@ -1,9 +1,9 @@
 from rastro_base.error import BaseError
 
 
-class AuthenticationError(BaseError):
-    code = "AUTH_AUTHENTICATION_FAILED"
+class CredenciaisIncorretasError(BaseError):
+    code = "AUTH_CREDENCIAIS_INCORRETAS"
 
 
-class UserNotFoundError(BaseError):
-    code = "AUTH_USER_NOT_FOUND"
+class ContaNaoEncontradaError(BaseError):
+    code = "AUTH_CONTA_NAO_ENCONTRAR"

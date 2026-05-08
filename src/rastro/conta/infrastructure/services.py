@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password, verify_password
 from django.http import HttpRequest
 
-from rastro.conta.domain.aggregates import User
+from rastro.conta.domain.aggregates import Conta
 from rastro.conta.domain.services import (
     PasswordHashingService,
     PasswordVerification,
@@ -21,13 +21,13 @@ class DjangoSessionService(SessionService):
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
 
-    def login(self, user: User) -> None:
+    def login(self, user: Conta) -> None:
         auth.login(self.request, DomainToDjangoUserMapper.map(user))
 
     def logout(self) -> None:
         auth.logout(self.request)
 
-    def logged_user(self) -> Optional[User]:
+    def logged_user(self) -> Optional[Conta]:
         user = auth.get_user(self.request)
 
         if user.pk is None:

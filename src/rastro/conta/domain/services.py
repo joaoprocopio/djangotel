@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, NamedTuple, Optional
 from rastro_base.service import Service
 
 if TYPE_CHECKING:  # previne imports circulares
-    from rastro.conta.domain.aggregates import User
+    from rastro.conta.domain.aggregates import Conta
     from rastro.conta.domain.value_objects import HashedPassword, RawPassword
 
 
@@ -25,10 +25,10 @@ class PasswordHashingService(Service):
 
 class SessionService(Service):
     @abstractmethod
-    def login(self, user: User) -> None: ...
+    def login(self, user: Conta) -> None: ...
 
     @abstractmethod
     def logout(self) -> None: ...
 
     @abstractmethod
-    def logged_user(self) -> Optional[User]: ...
+    def logged_user(self) -> Optional[Conta]: ...

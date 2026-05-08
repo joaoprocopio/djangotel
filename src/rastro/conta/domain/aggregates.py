@@ -11,7 +11,7 @@ from rastro_base.aggregate import AggregateRoot
 from rastro_shared_kernel.value_objects import Id
 
 
-class User(AggregateRoot):
+class Conta(AggregateRoot):
     id: Id
     username: Username
     email: Email

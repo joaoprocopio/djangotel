@@ -4,10 +4,10 @@ from rastro.conta.application.dtos import (
     EntrarInput,
 )
 from rastro.conta.domain.errors import (
-    AuthenticationError,
-    UserNotFoundError,
+    ContaNaoEncontradaError,
+    CredenciaisIncorretasError,
 )
-from rastro.conta.domain.repository import UserRepository
+from rastro.conta.domain.repository import ContaRepository
 from rastro.conta.domain.services import PasswordHashingService, SessionService
 from rastro.conta.domain.value_objects import (
     Email,
@@ -22,7 +22,7 @@ from rastro_base.use_case import UseCase
 class CadastrarUseCase(UseCase[CadastrarInput, ContaOutput]):
     def __init__(
         self,
-        repository: UserRepository,
+        repository: ContaRepository,
         session_service: SessionService,
         password_hashing_service: PasswordHashingService,
     ):
@@ -47,7 +47,7 @@ class CadastrarUseCase(UseCase[CadastrarInput, ContaOutput]):
 class EntrarUseCase(UseCase[EntrarInput, ContaOutput]):
     def __init__(
         self,
-        repository: UserRepository,
+        repository: ContaRepository,
         session_service: SessionService,
         password_hashing_service: PasswordHashingService,
     ):
@@ -63,14 +63,14 @@ class EntrarUseCase(UseCase[EntrarInput, ContaOutput]):
                 user = self.repository.get_by_username(input.query)
 
         if user is None:
-            raise UserNotFoundError()
+            raise ContaNaoEncontradaError()
 
         verification = user.verify_password(
             input.password, self.password_hashing_service
         )
 
         if not verification.is_correct:
-            raise AuthenticationError()
+            raise CredenciaisIncorretasError()
 
         if verification.must_upgrade:
             self.repository.update_password(user)

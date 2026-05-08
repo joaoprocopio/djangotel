@@ -2,8 +2,8 @@ from typing import Optional
 
 from django.contrib.auth import get_user_model
 
-from rastro.conta.domain.aggregates import User
-from rastro.conta.domain.repository import UserRepository
+from rastro.conta.domain.aggregates import Conta
+from rastro.conta.domain.repository import ContaRepository
 from rastro.conta.domain.value_objects import (
     Email,
     HashedPassword,
@@ -18,10 +18,10 @@ from rastro_shared_kernel.value_objects import Id
 DjangoUser = get_user_model()
 
 
-class DjangoUserRepository(UserRepository):
+class DjangoUserRepository(ContaRepository):
     def create(
         self, username: Username, email: Email, password: HashedPassword
-    ) -> User:
+    ) -> Conta:
         django_user = DjangoUser.objects.create(
             username=username.root,
             email=email.root,
@@ -32,7 +32,7 @@ class DjangoUserRepository(UserRepository):
 
         return DehydrateUser.map(django_user)
 
-    def get_by_id(self, id: Id) -> Optional[User]:
+    def get_by_id(self, id: Id) -> Optional[Conta]:
         try:
             django_user = DjangoUser.objects.get(pk=id.root)
 
@@ -40,7 +40,7 @@ class DjangoUserRepository(UserRepository):
         except DjangoUser.DoesNotExist:
             return None
 
-    def get_by_email(self, email: Email) -> Optional[User]:
+    def get_by_email(self, email: Email) -> Optional[Conta]:
         try:
             django_user = DjangoUser.objects.get(email=email.root)
 
@@ -48,7 +48,7 @@ class DjangoUserRepository(UserRepository):
         except DjangoUser.DoesNotExist:
             return None
 
-    def get_by_username(self, username: Username) -> Optional[User]:
+    def get_by_username(self, username: Username) -> Optional[Conta]:
         try:
             django_user = DjangoUser.objects.get(username=username.root)
 
@@ -57,7 +57,7 @@ class DjangoUserRepository(UserRepository):
         except DjangoUser.DoesNotExist:
             return None
 
-    def update_password(self, user: User) -> User:
+    def update_password(self, user: Conta) -> Conta:
         django_user = DomainToDjangoUserMapper.map(user)
         django_user.save(update_fields=["password"])
 

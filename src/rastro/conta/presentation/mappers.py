@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import get_user_model
 
 from rastro.conta.application.dtos import ContaOutput, ContaPublic
-from rastro.conta.domain.aggregates import User
+from rastro.conta.domain.aggregates import Conta
 from rastro.conta.domain.value_objects import Email, HashedPassword, Username
 from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id
@@ -14,10 +14,10 @@ else:
     DjangoUser = get_user_model()
 
 
-class DehydrateUser(Mapper[DjangoUser, User]):
+class DehydrateUser(Mapper[DjangoUser, Conta]):
     @staticmethod
-    def map(input: DjangoUser) -> User:
-        return User(
+    def map(input: DjangoUser) -> Conta:
+        return Conta(
             id=Id(input.pk),
             username=Username(input.username),
             email=Email(input.email),
@@ -26,9 +26,9 @@ class DehydrateUser(Mapper[DjangoUser, User]):
         )
 
 
-class DomainToDjangoUserMapper(Mapper[User, DjangoUser]):
+class DomainToDjangoUserMapper(Mapper[Conta, DjangoUser]):
     @staticmethod
-    def map(input: User) -> DjangoUser:
+    def map(input: Conta) -> DjangoUser:
         return DjangoUser(
             id=input.id.root,
             username=input.username.root,
@@ -38,10 +38,10 @@ class DomainToDjangoUserMapper(Mapper[User, DjangoUser]):
         )
 
 
-class OutputToDomainUserMapper(Mapper[ContaOutput, User]):
+class OutputToDomainUserMapper(Mapper[ContaOutput, Conta]):
     @staticmethod
-    def map(input: ContaOutput) -> User:
-        return User(
+    def map(input: ContaOutput) -> Conta:
+        return Conta(
             id=input.id,
             username=input.username,
             email=input.email,
@@ -59,9 +59,9 @@ class OutputToPublicUserMapper(Mapper[ContaOutput, ContaPublic]):
         )
 
 
-class DomainToOutputUserMapper(Mapper[User, ContaOutput]):
+class DomainToOutputUserMapper(Mapper[Conta, ContaOutput]):
     @staticmethod
-    def map(input: User) -> ContaOutput:
+    def map(input: Conta) -> ContaOutput:
         return ContaOutput(
             id=input.id.root,
             email=input.email.root,
@@ -71,9 +71,9 @@ class DomainToOutputUserMapper(Mapper[User, ContaOutput]):
         )
 
 
-class DomainToPublicUserMapper(Mapper[User, ContaPublic]):
+class DomainToPublicUserMapper(Mapper[Conta, ContaPublic]):
     @staticmethod
-    def map(input: User) -> ContaPublic:
+    def map(input: Conta) -> ContaPublic:
         return ContaPublic(
             email=input.email.root,
             username=input.username.root,
