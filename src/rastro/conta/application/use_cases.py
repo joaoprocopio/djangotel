@@ -1,19 +1,19 @@
-from rastro.auth.application.dtos import (
+from rastro.conta.application.dtos import (
     SignInInput,
     SignUpInput,
     UserOutput,
 )
-from rastro.auth.domain.errors import (
+from rastro.conta.domain.errors import (
     AuthenticationError,
     UserNotFoundError,
 )
-from rastro.auth.domain.repository import UserRepository
-from rastro.auth.domain.services import PasswordHashingService, SessionService
-from rastro.auth.domain.value_objects import (
+from rastro.conta.domain.repository import UserRepository
+from rastro.conta.domain.services import PasswordHashingService, SessionService
+from rastro.conta.domain.value_objects import (
     Email,
     Username,
 )
-from rastro.auth.presentation.mappers import (
+from rastro.conta.presentation.mappers import (
     DomainToOutputUserMapper,
 )
 from rastro_base.use_case import UseCase

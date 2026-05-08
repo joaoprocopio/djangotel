@@ -1,4 +1,4 @@
-from rastro.auth.domain.value_objects import (
+from rastro.conta.domain.value_objects import (
     Email,
     HashedPassword,
     RawPassword,

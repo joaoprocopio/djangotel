@@ -2,14 +2,14 @@ from typing import Optional
 
 from django.contrib.auth import get_user_model
 
-from rastro.auth.domain.aggregates import User
-from rastro.auth.domain.repository import UserRepository
-from rastro.auth.domain.value_objects import (
+from rastro.conta.domain.aggregates import User
+from rastro.conta.domain.repository import UserRepository
+from rastro.conta.domain.value_objects import (
     Email,
     HashedPassword,
     Username,
 )
-from rastro.auth.presentation.mappers import (
+from rastro.conta.presentation.mappers import (
     DehydrateUser,
     DomainToDjangoUserMapper,
 )

@@ -4,14 +4,14 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password, verify_password
 from django.http import HttpRequest
 
-from rastro.auth.domain.aggregates import User
-from rastro.auth.domain.services import (
+from rastro.conta.domain.aggregates import User
+from rastro.conta.domain.services import (
     PasswordHashingService,
     PasswordVerification,
     SessionService,
 )
-from rastro.auth.domain.value_objects import HashedPassword, RawPassword
-from rastro.auth.presentation.mappers import (
+from rastro.conta.domain.value_objects import HashedPassword, RawPassword
+from rastro.conta.presentation.mappers import (
     DehydrateUser,
     DomainToDjangoUserMapper,
 )

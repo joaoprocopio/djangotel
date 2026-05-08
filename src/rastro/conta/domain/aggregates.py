@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from rastro.auth.domain.services import PasswordHashingService, PasswordVerification
-from rastro.auth.domain.value_objects import (
+from rastro.conta.domain.services import PasswordHashingService, PasswordVerification
+from rastro.conta.domain.value_objects import (
     Email,
     HashedPassword,
     RawPassword,

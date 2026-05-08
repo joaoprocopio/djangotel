@@ -5,14 +5,14 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from rastro.auth.application.dtos import SignInInput, SignUpInput
-from rastro.auth.application.use_cases import SignInUseCase, SignUpUseCase
-from rastro.auth.infrastructure.repositories import DjangoUserRepository
-from rastro.auth.infrastructure.services import (
+from rastro.conta.application.dtos import SignInInput, SignUpInput
+from rastro.conta.application.use_cases import SignInUseCase, SignUpUseCase
+from rastro.conta.infrastructure.repositories import DjangoUserRepository
+from rastro.conta.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
 )
-from rastro.auth.presentation.mappers import (
+from rastro.conta.presentation.mappers import (
     DomainToPublicUserMapper,
     OutputToPublicUserMapper,
 )
@@ -24,7 +24,7 @@ class CsrfTokenView(View):
         return HttpResponse(status=HTTPStatus.OK)
 
 
-class MeView(View):
+class ContaView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         session_service = DjangoSessionService(request)
         user = session_service.logged_user()

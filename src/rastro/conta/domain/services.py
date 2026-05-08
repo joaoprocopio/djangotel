@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING, NamedTuple, Optional
 from rastro_base.service import Service
 
 if TYPE_CHECKING:  # previne imports circulares
-    from rastro.auth.domain.aggregates import User
-    from rastro.auth.domain.value_objects import HashedPassword, RawPassword
+    from rastro.conta.domain.aggregates import User
+    from rastro.conta.domain.value_objects import HashedPassword, RawPassword
 
 
 class PasswordVerification(NamedTuple):
