@@ -1,25 +1,29 @@
-# views.py
 from http import HTTPStatus
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rastro.auth.application.dtos import SignInInput, SignUpInput
 from rastro.auth.application.use_cases import SignInUseCase, SignUpUseCase
-from rastro.auth.infrastructure.mappers import (
-    DomainToPublicUserMapper,
-    OutputToPublicUserMapper,
-)
 from rastro.auth.infrastructure.repositories import DjangoUserRepository
 from rastro.auth.infrastructure.services import (
     DjangoPasswordHashingService,
     DjangoSessionService,
 )
+from rastro.auth.presentation.mappers import (
+    DomainToPublicUserMapper,
+    OutputToPublicUserMapper,
+)
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
+class CsrfTokenView(View):
+    def get(self, _: HttpRequest) -> HttpResponse:
+        return HttpResponse(status=HTTPStatus.OK)
+
+
 class MeView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         session_service = DjangoSessionService(request)
@@ -34,7 +38,6 @@ class MeView(View):
         )
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class SignInView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()
@@ -53,7 +56,6 @@ class SignInView(View):
         )
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class SignUpView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         repository = DjangoUserRepository()

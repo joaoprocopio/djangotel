@@ -9,8 +9,8 @@ from rastro.auth.domain.value_objects import (
     HashedPassword,
     Username,
 )
-from rastro.auth.infrastructure.mappers import (
-    DjangoToDomainUserMapper,
+from rastro.auth.presentation.mappers import (
+    DehydrateUser,
     DomainToDjangoUserMapper,
 )
 from rastro_shared_kernel.value_objects import Id
@@ -30,13 +30,13 @@ class DjangoUserRepository(UserRepository):
         django_user.save()
         django_user.refresh_from_db()
 
-        return DjangoToDomainUserMapper.map(django_user)
+        return DehydrateUser.map(django_user)
 
     def get_by_id(self, id: Id) -> Optional[User]:
         try:
             django_user = DjangoUser.objects.get(pk=id.root)
 
-            return DjangoToDomainUserMapper.map(django_user)
+            return DehydrateUser.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
@@ -44,7 +44,7 @@ class DjangoUserRepository(UserRepository):
         try:
             django_user = DjangoUser.objects.get(email=email.root)
 
-            return DjangoToDomainUserMapper.map(django_user)
+            return DehydrateUser.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
@@ -53,7 +53,7 @@ class DjangoUserRepository(UserRepository):
             django_user = DjangoUser.objects.get(username=username.root)
 
             django_user.check_password
-            return DjangoToDomainUserMapper.map(django_user)
+            return DehydrateUser.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
@@ -61,4 +61,4 @@ class DjangoUserRepository(UserRepository):
         django_user = DomainToDjangoUserMapper.map(user)
         django_user.save(update_fields=["password"])
 
-        return DjangoToDomainUserMapper.map(django_user)
+        return DehydrateUser.map(django_user)

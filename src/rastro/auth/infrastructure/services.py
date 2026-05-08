@@ -11,8 +11,8 @@ from rastro.auth.domain.services import (
     SessionService,
 )
 from rastro.auth.domain.value_objects import HashedPassword, RawPassword
-from rastro.auth.infrastructure.mappers import (
-    DjangoToDomainUserMapper,
+from rastro.auth.presentation.mappers import (
+    DehydrateUser,
     DomainToDjangoUserMapper,
 )
 
@@ -33,7 +33,7 @@ class DjangoSessionService(SessionService):
         if user.pk is None:
             return None
 
-        return DjangoToDomainUserMapper.map(user)
+        return DehydrateUser.map(user)
 
 
 class DjangoPasswordHashingService(PasswordHashingService):

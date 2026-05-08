@@ -13,7 +13,7 @@ from rastro.auth.domain.value_objects import (
     Email,
     Username,
 )
-from rastro.auth.infrastructure.mappers import (
+from rastro.auth.presentation.mappers import (
     DomainToOutputUserMapper,
 )
 from rastro_base.use_case import UseCase

@@ -14,7 +14,7 @@ else:
     DjangoUser = get_user_model()
 
 
-class DjangoToDomainUserMapper(Mapper[DjangoUser, User]):
+class DehydrateUser(Mapper[DjangoUser, User]):
     @staticmethod
     def map(input: DjangoUser) -> User:
         return User(
