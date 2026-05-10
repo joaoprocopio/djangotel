@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Optional
+
 from rastro.conta.domain.value_objects import (
     Email,
     HashedPassword,
@@ -24,7 +27,13 @@ class ContaOutput(DTO):
     email: Email
     username: Username
     password: HashedPassword
+    first_name: str
+    last_name: str
+    date_joined: datetime
+    last_login: Optional[datetime]
     is_active: bool
+    is_staff: bool
+    is_superuser: bool
 
 
 class ContaPublic(DTO):
