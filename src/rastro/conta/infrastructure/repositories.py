@@ -15,7 +15,7 @@ from rastro_shared_kernel.value_objects import Id
 DjangoUser = get_user_model()
 
 
-class DjangoUserRepository(ContaRepository):
+class DjangoContaRepository(ContaRepository):
     def create(
         self, username: Username, email: Email, password: HashedPassword
     ) -> Conta:

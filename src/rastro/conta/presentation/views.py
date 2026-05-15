@@ -6,13 +6,14 @@ from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rastro.conta.application.dtos import CadastrarInput, EntrarInput
-from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
-from rastro.conta.infrastructure.repositories import DjangoUserRepository
 from rastro.conta.infrastructure.services import (
-    DjangoPasswordHashingService,
     DjangoSessionService,
 )
 from rastro.conta.presentation.conversions import present_conta
+from rastro.conta.presentation.dependencies import (
+    DjangoCadastrarUseCaseFactory,
+    DjangoEntrarUseCaseFactory,
+)
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
@@ -36,32 +37,24 @@ class ContaView(View):
 
 
 class EntrarView(View):
-    def post(self, request: HttpRequest) -> HttpResponse:
-        repository = DjangoUserRepository()
-        password_hashing_service = DjangoPasswordHashingService()
-        session_service = DjangoSessionService(request)
-        entrar_use_case = EntrarUseCase(
-            repository, session_service, password_hashing_service
-        )
+    entrar_use_case_factory: DjangoEntrarUseCaseFactory
 
-        input = EntrarInput.model_validate_json(request.body)
-        output = entrar_use_case.execute(input)
+    def post(self, request: HttpRequest) -> HttpResponse:
+        entrar_use_case = self.entrar_use_case_factory(request)
+        entrar_input = EntrarInput.model_validate_json(request.body)
+        conta_output = entrar_use_case.execute(entrar_input)
 
         return JsonResponse(
-            present_conta(output).model_dump(),
+            present_conta(conta_output).model_dump(),
             status=HTTPStatus.OK,
         )
 
 
 class CadastrarView(View):
-    def post(self, request: HttpRequest) -> HttpResponse:
-        repository = DjangoUserRepository()
-        password_hashing_service = DjangoPasswordHashingService()
-        session_service = DjangoSessionService(request)
-        cadastrar_use_case = CadastrarUseCase(
-            repository, session_service, password_hashing_service
-        )
+    cadastrar_use_case_factory: DjangoCadastrarUseCaseFactory
 
+    def post(self, request: HttpRequest) -> HttpResponse:
+        cadastrar_use_case = self.cadastrar_use_case_factory(request)
         input = CadastrarInput.model_validate_json(request.body)
         output = cadastrar_use_case.execute(input)
 
