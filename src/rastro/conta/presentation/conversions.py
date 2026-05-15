@@ -40,6 +40,12 @@ def dehydrate_conta(conta: Conta) -> DjangoUser:
         username=conta.username.root,
         email=conta.email.root,
         password=conta.password.root,
+        first_name=conta.first_name,
+        last_name=conta.last_name,
+        date_joined=conta.date_joined,
+        last_login=conta.last_login,
+        is_superuser=conta.is_superuser,
+        is_staff=conta.is_staff,
         is_active=conta.is_active,
     )
 
