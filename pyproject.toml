@@ -24,6 +24,7 @@ dependencies = [
 dev = [
     "django-stubs-ext>=6.0.1",
     "django-stubs[compatible-mypy]>=6.0.1",
+    "pytest>=9.0.3",
 ]
 
 [tool.mypy]
