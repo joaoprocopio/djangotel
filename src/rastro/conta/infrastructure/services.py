@@ -11,7 +11,7 @@ from rastro.conta.domain.services import (
     SessionService,
 )
 from rastro.conta.domain.value_objects import HashedPassword, RawPassword
-from rastro.conta.presentation.conversions import dehydrate_conta, hydrate_conta
+from rastro.conta.presentation.mappers import DehydrateContaMapper, HydrateContaMapper
 
 
 class DjangoSessionService(SessionService):
@@ -19,7 +19,7 @@ class DjangoSessionService(SessionService):
         self.request = request
 
     def login(self, user: Conta) -> None:
-        auth.login(self.request, dehydrate_conta(user))
+        auth.login(self.request, DehydrateContaMapper.map(user))
 
     def logout(self) -> None:
         auth.logout(self.request)
@@ -30,7 +30,7 @@ class DjangoSessionService(SessionService):
         if user.pk is None:
             return None
 
-        return hydrate_conta(user)
+        return HydrateContaMapper.map(user)
 
 
 class DjangoPasswordHashingService(PasswordHashingService):

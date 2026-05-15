@@ -1,14 +1,11 @@
 from django.contrib.auth.models import User
 
 from rastro.conta.domain.value_objects import Email, Username
-from rastro.conta.presentation.conversions import (
-    dehydrate_conta,
-    hydrate_conta,
-)
+from rastro.conta.presentation.mappers import DehydrateContaMapper, HydrateContaMapper
 
 
 def test_hydrate_conta(user: User) -> None:
-    conta = hydrate_conta(user)
+    conta = HydrateContaMapper.map(user)
 
     assert conta.username == Username(user.username)
     assert conta.email == Email(user.email)
@@ -22,7 +19,7 @@ def test_hydrate_conta(user: User) -> None:
 
 
 def test_dehydrate_conta(user: User) -> None:
-    dehydrated_user = dehydrate_conta(hydrate_conta(user))
+    dehydrated_user = DehydrateContaMapper.map(HydrateContaMapper.map(user))
 
     assert dehydrated_user.username == user.username
     assert dehydrated_user.email == user.email

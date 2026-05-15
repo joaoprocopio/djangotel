@@ -13,7 +13,7 @@ from rastro.conta.domain.value_objects import (
     Email,
     Username,
 )
-from rastro.conta.presentation.conversions import output_conta
+from rastro.conta.presentation.mappers import OutputContaMapper
 from rastro_base.use_case import UseCase
 
 
@@ -39,7 +39,7 @@ class CadastrarUseCase(UseCase[CadastrarInput, ContaOutput]):
 
         self.session_service.login(user)
 
-        return output_conta(user)
+        return OutputContaMapper.map(user)
 
 
 class EntrarUseCase(UseCase[EntrarInput, ContaOutput]):
@@ -75,4 +75,4 @@ class EntrarUseCase(UseCase[EntrarInput, ContaOutput]):
 
         self.session_service.login(user)
 
-        return output_conta(user)
+        return OutputContaMapper.map(user)

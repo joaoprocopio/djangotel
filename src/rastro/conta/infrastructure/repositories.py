@@ -9,7 +9,7 @@ from rastro.conta.domain.value_objects import (
     HashedPassword,
     Username,
 )
-from rastro.conta.presentation.conversions import dehydrate_conta, hydrate_conta
+from rastro.conta.presentation.mappers import DehydrateContaMapper, HydrateContaMapper
 from rastro_shared_kernel.value_objects import Id
 
 DjangoUser = get_user_model()
@@ -27,13 +27,13 @@ class DjangoContaRepository(ContaRepository):
         django_user.save()
         django_user.refresh_from_db()
 
-        return hydrate_conta(django_user)
+        return HydrateContaMapper.map(django_user)
 
     def get_by_id(self, id: Id) -> Optional[Conta]:
         try:
             django_user = DjangoUser.objects.get(pk=id.root)
 
-            return hydrate_conta(django_user)
+            return HydrateContaMapper.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
@@ -41,7 +41,7 @@ class DjangoContaRepository(ContaRepository):
         try:
             django_user = DjangoUser.objects.get(email=email.root)
 
-            return hydrate_conta(django_user)
+            return HydrateContaMapper.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
@@ -50,12 +50,12 @@ class DjangoContaRepository(ContaRepository):
             django_user = DjangoUser.objects.get(username=username.root)
 
             django_user.check_password
-            return hydrate_conta(django_user)
+            return HydrateContaMapper.map(django_user)
         except DjangoUser.DoesNotExist:
             return None
 
     def update_password(self, user: Conta) -> Conta:
-        django_user = dehydrate_conta(user)
+        django_user = DehydrateContaMapper.map(user)
         django_user.save(update_fields=["password"])
 
-        return hydrate_conta(django_user)
+        return HydrateContaMapper.map(django_user)

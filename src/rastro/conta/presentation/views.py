@@ -9,11 +9,11 @@ from rastro.conta.application.dtos import CadastrarInput, EntrarInput
 from rastro.conta.infrastructure.services import (
     DjangoSessionService,
 )
-from rastro.conta.presentation.conversions import present_conta
 from rastro.conta.presentation.dependencies import (
     DjangoCadastrarUseCaseFactory,
     DjangoEntrarUseCaseFactory,
 )
+from rastro.conta.presentation.mappers import PresentContaMapper
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
@@ -31,7 +31,7 @@ class ContaView(View):
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
         return JsonResponse(
-            present_conta(user).model_dump(),
+            PresentContaMapper.map(user).model_dump(),
             status=HTTPStatus.OK,
         )
 
@@ -45,7 +45,7 @@ class EntrarView(View):
         conta_output = entrar_use_case.execute(entrar_input)
 
         return JsonResponse(
-            present_conta(conta_output).model_dump(),
+            PresentContaMapper.map(conta_output).model_dump(),
             status=HTTPStatus.OK,
         )
 
@@ -59,7 +59,7 @@ class CadastrarView(View):
         output = cadastrar_use_case.execute(input)
 
         return JsonResponse(
-            present_conta(output).model_dump(),
+            PresentContaMapper.map(output).model_dump(),
             status=HTTPStatus.CREATED,
         )
 
