@@ -14,8 +14,8 @@ else:
     DjangoUser = get_user_model()
 
 
-def conversion_not_implemented_msg(source: object, target: object) -> str:
-    return f"Cannot convert {type(source).__name__} from {type(target).__name__}"
+def conversion_not_implemented_msg(*, source: object, target: object) -> str:
+    return f"Cannot convert from {type(source).__name__} to {type(target).__name__}"
 
 
 def hydrate_conta(conta: DjangoUser) -> Conta:
@@ -46,7 +46,9 @@ def dehydrate_conta(conta: Conta) -> DjangoUser:
 
 @singledispatch
 def present_conta(conta: object) -> ContaPublic:
-    raise NotImplementedError(conversion_not_implemented_msg(conta, DjangoUser))
+    raise NotImplementedError(
+        conversion_not_implemented_msg(source=conta, target=ContaPublic)
+    )
 
 
 @present_conta.register
@@ -67,7 +69,9 @@ def _(conta: ContaOutput) -> ContaPublic:
 
 @singledispatch
 def output_conta(conta: object) -> ContaOutput:
-    raise NotImplementedError(conversion_not_implemented_msg(conta, ContaOutput))
+    raise NotImplementedError(
+        conversion_not_implemented_msg(source=conta, target=ContaOutput)
+    )
 
 
 @output_conta.register

@@ -17,12 +17,12 @@ DjangoUser = get_user_model()
 
 class DjangoContaRepository(ContaRepository):
     def create(
-        self, username: Username, email: Email, password: HashedPassword
+        self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> Conta:
         django_user = DjangoUser.objects.create(
             username=username.root,
             email=email.root,
-            password=password.root,
+            password=hashed_password.root,
         )
         django_user.save()
         django_user.refresh_from_db()
