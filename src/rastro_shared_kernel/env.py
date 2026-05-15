@@ -68,9 +68,9 @@ def parse_booleanish(raw_value: str) -> bool:
     value = raw_value.strip().lower()
 
     match value:
-        case "true" | "1":
+        case "true" | "yes" | "1":
             return True
-        case "false" | "0":
+        case "false" | "no" | "0":
             return False
 
     raise TypeError(f"Could not parse {raw_value} as booleanish value.")
