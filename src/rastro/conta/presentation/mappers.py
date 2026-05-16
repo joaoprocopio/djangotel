@@ -56,8 +56,8 @@ class PresentContaMapper(Mapper[Conta | ContaOutput, ContaPublic]):
         match source:
             case Conta():
                 return ContaPublic(
-                    email=source.email.root,
-                    username=source.username.root,
+                    email=source.email,
+                    username=source.username,
                 )
             case ContaOutput():
                 return ContaPublic(
