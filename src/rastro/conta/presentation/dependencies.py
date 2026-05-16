@@ -1,5 +1,3 @@
-from typing import Protocol
-
 from django.http import HttpRequest
 
 from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
@@ -10,25 +8,23 @@ from rastro.conta.infrastructure.services import (
 )
 
 
-class DjangoEntrarUseCaseFactory(Protocol):
-    def __call__(self, request: HttpRequest) -> EntrarUseCase:
-        repository = DjangoContaRepository()
-        password_hashing_service = DjangoPasswordHashingService()
-        session_service = DjangoSessionService(request)
-        entrar_use_case = EntrarUseCase(
-            repository, session_service, password_hashing_service
-        )
+def django_entrar_use_case_dependency(request: HttpRequest) -> EntrarUseCase:
+    repository = DjangoContaRepository()
+    password_hashing_service = DjangoPasswordHashingService()
+    session_service = DjangoSessionService(request)
+    entrar_use_case = EntrarUseCase(
+        repository, session_service, password_hashing_service
+    )
 
-        return entrar_use_case
+    return entrar_use_case
 
 
-class DjangoCadastrarUseCaseFactory(Protocol):
-    def __call__(self, request: HttpRequest) -> CadastrarUseCase:
-        repository = DjangoContaRepository()
-        password_hashing_service = DjangoPasswordHashingService()
-        session_service = DjangoSessionService(request)
-        cadastrar_use_case = CadastrarUseCase(
-            repository, session_service, password_hashing_service
-        )
+def django_cadastrar_use_case_factory(request: HttpRequest) -> CadastrarUseCase:
+    repository = DjangoContaRepository()
+    password_hashing_service = DjangoPasswordHashingService()
+    session_service = DjangoSessionService(request)
+    cadastrar_use_case = CadastrarUseCase(
+        repository, session_service, password_hashing_service
+    )
 
-        return cadastrar_use_case
+    return cadastrar_use_case

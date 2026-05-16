@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import Callable
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
@@ -6,12 +7,13 @@ from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rastro.conta.application.dtos import CadastrarInput, EntrarInput
+from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
 from rastro.conta.infrastructure.services import (
     DjangoSessionService,
 )
 from rastro.conta.presentation.dependencies import (
-    DjangoCadastrarUseCaseFactory,
-    DjangoEntrarUseCaseFactory,
+    django_cadastrar_use_case_factory,
+    django_entrar_use_case_dependency,
 )
 from rastro.conta.presentation.mappers import PresentContaMapper
 
@@ -37,7 +39,9 @@ class ContaView(View):
 
 
 class EntrarView(View):
-    entrar_use_case_factory: DjangoEntrarUseCaseFactory
+    entrar_use_case_factory: Callable[[HttpRequest], EntrarUseCase] = (
+        django_entrar_use_case_dependency
+    )
 
     def post(self, request: HttpRequest) -> HttpResponse:
         entrar_use_case = self.entrar_use_case_factory(request)
@@ -51,7 +55,9 @@ class EntrarView(View):
 
 
 class CadastrarView(View):
-    cadastrar_use_case_factory: DjangoCadastrarUseCaseFactory
+    cadastrar_use_case_factory: Callable[[HttpRequest], CadastrarUseCase] = (
+        django_cadastrar_use_case_factory
+    )
 
     def post(self, request: HttpRequest) -> HttpResponse:
         cadastrar_use_case = self.cadastrar_use_case_factory(request)
