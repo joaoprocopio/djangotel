@@ -8,6 +8,6 @@ project to experiment setting up the complete grafana stack + opentelemetry with
 ```sh
 uv run ruff check src/
 uv run mypy src/
-uv run pytest --cov=src/
+uv run pytest
 uv run python manage.py check
 ```

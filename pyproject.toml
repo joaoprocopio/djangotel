@@ -51,5 +51,5 @@ django_settings_module = "rastro.settings"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "rastro.settings"
-addopts = "-s"
+addopts = "-s --cov src/"
 
