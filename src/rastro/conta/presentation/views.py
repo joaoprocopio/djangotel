@@ -8,14 +8,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rastro.conta.application.dtos import CadastrarInput, EntrarInput
 from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
-from rastro.conta.infrastructure.services import (
-    DjangoSessionService,
-)
-from rastro.conta.presentation.dependencies import (
+from rastro.conta.infrastructure.dependencies import (
     django_cadastrar_use_case_factory,
     django_entrar_use_case_dependency,
 )
-from rastro.conta.presentation.mappers import PresentContaMapper
+from rastro.conta.infrastructure.services import (
+    DjangoSessionService,
+)
+from rastro.conta.shared.mappers import PresentContaMapper
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")

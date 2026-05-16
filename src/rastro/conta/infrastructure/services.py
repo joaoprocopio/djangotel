@@ -11,7 +11,7 @@ from rastro.conta.domain.services import (
     SessionService,
 )
 from rastro.conta.domain.value_objects import HashedPassword, RawPassword
-from rastro.conta.presentation.mappers import DehydrateContaMapper, HydrateContaMapper
+from rastro.conta.shared.mappers import DehydrateContaMapper, HydrateContaMapper
 
 
 class DjangoSessionService(SessionService):

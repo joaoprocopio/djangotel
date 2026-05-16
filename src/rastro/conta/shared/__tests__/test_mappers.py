@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 
 from rastro.conta.domain.value_objects import Email, Username
-from rastro.conta.presentation.mappers import (
+from rastro.conta.shared.mappers import (
     DehydrateContaMapper,
     HydrateContaMapper,
     OutputContaMapper,

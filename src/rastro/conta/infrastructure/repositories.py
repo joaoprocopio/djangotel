@@ -9,7 +9,7 @@ from rastro.conta.domain.value_objects import (
     HashedPassword,
     Username,
 )
-from rastro.conta.presentation.mappers import DehydrateContaMapper, HydrateContaMapper
+from rastro.conta.shared.mappers import DehydrateContaMapper, HydrateContaMapper
 from rastro_shared_kernel.value_objects import Id
 
 DjangoUser = get_user_model()

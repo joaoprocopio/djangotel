@@ -13,7 +13,7 @@ from rastro.conta.domain.value_objects import (
     Email,
     Username,
 )
-from rastro.conta.presentation.mappers import OutputContaMapper
+from rastro.conta.shared.mappers import OutputContaMapper
 from rastro_base.use_case import UseCase
 
 
