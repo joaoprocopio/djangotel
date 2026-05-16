@@ -18,7 +18,7 @@ from rastro.conta.presentation.dependencies import (
 from rastro.conta.presentation.mappers import PresentContaMapper
 
 
-@method_decorator(ensure_csrf_cookie, name="get")
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class CsrfTokenView(View):
     def get(self, _: HttpRequest) -> HttpResponse:
         return HttpResponse(status=HTTPStatus.OK)
