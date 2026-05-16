@@ -4,6 +4,7 @@ from rastro.conta.application.use_cases import (
     CadastrarUseCase,
     ContaUseCase,
     EntrarUseCase,
+    SairUseCase,
 )
 from rastro.conta.infrastructure.repositories import DjangoContaRepository
 from rastro.conta.infrastructure.services import (
@@ -39,3 +40,10 @@ def make_django_cadastrar_use_case(request: HttpRequest) -> CadastrarUseCase:
     )
 
     return cadastrar_use_case
+
+
+def make_django_sair_use_case(request: HttpRequest) -> SairUseCase:
+    session_service = DjangoSessionService(request)
+    sair_use_case = SairUseCase(session_service)
+
+    return sair_use_case

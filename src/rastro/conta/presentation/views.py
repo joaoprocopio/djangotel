@@ -11,14 +11,13 @@ from rastro.conta.application.use_cases import (
     CadastrarUseCase,
     ContaUseCase,
     EntrarUseCase,
+    SairUseCase,
 )
 from rastro.conta.infrastructure.composition import (
     make_django_cadastrar_use_case,
     make_django_conta_use_case,
     make_django_entrar_use_case,
-)
-from rastro.conta.infrastructure.services import (
-    DjangoSessionService,
+    make_django_sair_use_case,
 )
 from rastro.conta.shared.mappers import PresentContaMapper
 
@@ -80,13 +79,10 @@ class CadastrarView(View):
 
 
 class SairView(View):
+    make_sair_use_case: Callable[[HttpRequest], SairUseCase] = make_django_sair_use_case
+
     def post(self, request: HttpRequest) -> HttpResponse:
-        session_service = DjangoSessionService(request)
-        user = session_service.logged_conta()
+        sair_use_case = self.make_sair_use_case(request)
+        sair_use_case.execute()
 
-        if user is None:
-            return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
-
-        session_service.logout()
-
-        return HttpResponse(status=HTTPStatus.NO_CONTENT)
+        return HttpResponse(status=HTTPStatus.OK)

@@ -94,3 +94,11 @@ class EntrarUseCase(UseCase):
         self.session_service.login(conta)
 
         return OutputContaMapper.map(conta)
+
+
+class SairUseCase(UseCase):
+    def __init__(self, session_service: SessionService):
+        self.session_service = session_service
+
+    def execute(self) -> None:
+        self.session_service.logout()

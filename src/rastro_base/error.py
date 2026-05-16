@@ -27,14 +27,23 @@ class BaseError(Exception):
         super().__init_subclass__(**kwargs)
 
         if "code" not in cls.__dict__:
-            raise TypeError(f"{cls.__name__} must define 'code' attribute")
+            raise CodeUndefinedError(f"{cls.__name__} must define 'code' attribute")
 
         code: str = cls.__dict__["code"]
 
         if code in cls._registry:
-            raise ValueError(f"Duplicate error code: {code}")
+            raise CodeDuplicatedError(f"Duplicate error code: {code}")
 
         if not UPPER_SNAKE_CASE_PATTERN.match(code):
-            raise TypeError(f"Code must be UPPER_SNAKE_CASE: {code}")
+            raise CodeNamingError(f"Code must be UPPER_SNAKE_CASE: {code}")
 
         cls._registry.add(code)
+
+
+class CodeUndefinedError(Exception): ...
+
+
+class CodeDuplicatedError(Exception): ...
+
+
+class CodeNamingError(Exception): ...
