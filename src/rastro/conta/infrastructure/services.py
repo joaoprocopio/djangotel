@@ -18,13 +18,13 @@ class DjangoSessionService(SessionService):
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
 
-    def login(self, user: Conta) -> None:
-        auth.login(self.request, DehydrateContaMapper.map(user))
+    def login(self, conta: Conta) -> None:
+        auth.login(self.request, DehydrateContaMapper.map(conta))
 
     def logout(self) -> None:
         auth.logout(self.request)
 
-    def logged_user(self) -> Optional[Conta]:
+    def logged_conta(self) -> Optional[Conta]:
         user = auth.get_user(self.request)
 
         if user.pk is None:

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from django.contrib.auth import get_user_model
 
@@ -12,46 +12,48 @@ from rastro.conta.domain.value_objects import (
 from rastro.conta.shared.mappers import DehydrateContaMapper, HydrateContaMapper
 from rastro_shared_kernel.value_objects import Id
 
-DjangoUser = get_user_model()
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 
 class DjangoContaRepository(ContaRepository):
     def create(
         self, username: Username, email: Email, hashed_password: HashedPassword
     ) -> Conta:
-        django_user = DjangoUser.objects.create(
+        user = User.objects.create(
             username=username.root,
             email=email.root,
             password=hashed_password.root,
         )
-        django_user.save()
-        django_user.refresh_from_db()
+        user.save()
+        user.refresh_from_db()
 
-        return HydrateContaMapper.map(django_user)
+        return HydrateContaMapper.map(user)
 
     def get_by_id(self, id: Id) -> Optional[Conta]:
         try:
-            django_user = DjangoUser.objects.get(pk=id.root)
+            user = User.objects.get(pk=id.root)
 
-            return HydrateContaMapper.map(django_user)
-        except DjangoUser.DoesNotExist:
+            return HydrateContaMapper.map(user)
+        except User.DoesNotExist:
             return None
 
     def get_by_email(self, email: Email) -> Optional[Conta]:
         try:
-            django_user = DjangoUser.objects.get(email=email.root)
+            user = User.objects.get(email=email.root)
 
-            return HydrateContaMapper.map(django_user)
-        except DjangoUser.DoesNotExist:
+            return HydrateContaMapper.map(user)
+        except User.DoesNotExist:
             return None
 
     def get_by_username(self, username: Username) -> Optional[Conta]:
         try:
-            django_user = DjangoUser.objects.get(username=username.root)
+            user = User.objects.get(username=username.root)
 
-            django_user.check_password
-            return HydrateContaMapper.map(django_user)
-        except DjangoUser.DoesNotExist:
+            return HydrateContaMapper.map(user)
+        except User.DoesNotExist:
             return None
 
     def update_password(self, user: Conta) -> Conta:

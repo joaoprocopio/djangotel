@@ -9,14 +9,14 @@ from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id
 
 if TYPE_CHECKING:
-    from django.contrib.auth.models import User as DjangoUser
+    from django.contrib.auth.models import User
 else:
-    DjangoUser = get_user_model()
+    User = get_user_model()
 
 
-class HydrateContaMapper(Mapper[DjangoUser, Conta]):
+class HydrateContaMapper(Mapper[User, Conta]):
     @staticmethod
-    def map(conta: DjangoUser) -> Conta:
+    def map(conta: User) -> Conta:
         return Conta(
             id=Id(conta.pk),
             username=Username(conta.username),
@@ -32,10 +32,10 @@ class HydrateContaMapper(Mapper[DjangoUser, Conta]):
         )
 
 
-class DehydrateContaMapper(Mapper[Conta, DjangoUser]):
+class DehydrateContaMapper(Mapper[Conta, User]):
     @staticmethod
-    def map(conta: Conta) -> DjangoUser:
-        return DjangoUser(
+    def map(conta: Conta) -> User:
+        return User(
             id=conta.id.root,
             username=conta.username.root,
             email=conta.email.root,

@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
-
-T_INPUT = TypeVar("T_INPUT")
-T_OUTPUT = TypeVar("T_OUTPUT")
+from typing import Any
 
 
-class UseCase(ABC, Generic[T_INPUT, T_OUTPUT]):
+class UseCase(ABC):
     @abstractmethod
-    def execute(self, input: T_INPUT) -> T_OUTPUT: ...
+    def execute(self, *args: Any, **kwargs: Any) -> Any: ...

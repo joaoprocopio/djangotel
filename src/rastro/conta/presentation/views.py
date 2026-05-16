@@ -7,10 +7,15 @@ from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rastro.conta.application.dtos import CadastrarInput, EntrarInput
-from rastro.conta.application.use_cases import CadastrarUseCase, EntrarUseCase
-from rastro.conta.infrastructure.dependencies import (
-    django_cadastrar_use_case_factory,
-    django_entrar_use_case_dependency,
+from rastro.conta.application.use_cases import (
+    CadastrarUseCase,
+    ContaUseCase,
+    EntrarUseCase,
+)
+from rastro.conta.infrastructure.composition import (
+    make_django_cadastrar_use_case,
+    make_django_conta_use_case,
+    make_django_entrar_use_case,
 )
 from rastro.conta.infrastructure.services import (
     DjangoSessionService,
@@ -25,26 +30,30 @@ class CsrfTokenView(View):
 
 
 class ContaView(View):
-    def get(self, request: HttpRequest) -> HttpResponse:
-        session_service = DjangoSessionService(request)
-        user = session_service.logged_user()
+    make_conta_use_case: Callable[[HttpRequest], ContaUseCase] = (
+        make_django_conta_use_case
+    )
 
-        if user is None:
+    def get(self, request: HttpRequest) -> HttpResponse:
+        conta_use_case = self.make_conta_use_case(request)
+        conta = conta_use_case.execute()
+
+        if conta is None:
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
         return JsonResponse(
-            PresentContaMapper.map(user).model_dump(),
+            PresentContaMapper.map(conta).model_dump(),
             status=HTTPStatus.OK,
         )
 
 
 class EntrarView(View):
-    entrar_use_case_factory: Callable[[HttpRequest], EntrarUseCase] = (
-        django_entrar_use_case_dependency
+    make_entrar_use_case: Callable[[HttpRequest], EntrarUseCase] = (
+        make_django_entrar_use_case
     )
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        entrar_use_case = self.entrar_use_case_factory(request)
+        entrar_use_case = self.make_entrar_use_case(request)
         entrar_input = EntrarInput.model_validate_json(request.body)
         conta_output = entrar_use_case.execute(entrar_input)
 
@@ -55,12 +64,12 @@ class EntrarView(View):
 
 
 class CadastrarView(View):
-    cadastrar_use_case_factory: Callable[[HttpRequest], CadastrarUseCase] = (
-        django_cadastrar_use_case_factory
+    make_cadastrar_use_case: Callable[[HttpRequest], CadastrarUseCase] = (
+        make_django_cadastrar_use_case
     )
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        cadastrar_use_case = self.cadastrar_use_case_factory(request)
+        cadastrar_use_case = self.make_cadastrar_use_case(request)
         input = CadastrarInput.model_validate_json(request.body)
         output = cadastrar_use_case.execute(input)
 
@@ -73,7 +82,7 @@ class CadastrarView(View):
 class SairView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         session_service = DjangoSessionService(request)
-        user = session_service.logged_user()
+        user = session_service.logged_conta()
 
         if user is None:
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
