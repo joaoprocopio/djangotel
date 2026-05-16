@@ -1,4 +1,6 @@
-from django.contrib.auth.models import User
+from typing import TYPE_CHECKING
+
+from django.contrib.auth import get_user_model
 
 from rastro.conta.domain.value_objects import Email, Username
 from rastro.conta.shared.mappers import (
@@ -7,6 +9,11 @@ from rastro.conta.shared.mappers import (
     OutputContaMapper,
     PresentContaMapper,
 )
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 
 def test_hydrate_conta(user: User) -> None:

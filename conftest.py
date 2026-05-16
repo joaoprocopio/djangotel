@@ -1,6 +1,14 @@
+from typing import TYPE_CHECKING
+
 import pytest
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from model_bakery import baker
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 
 @pytest.fixture
