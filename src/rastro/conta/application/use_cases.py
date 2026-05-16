@@ -29,7 +29,10 @@ class ContaUseCase(UseCase):
     def execute(self) -> Optional[ContaOutput]:
         conta = self.session_service.logged_conta()
 
-        return OutputContaMapper.map(conta) if conta is not None else conta
+        if conta is None:
+            return None
+
+        return OutputContaMapper.map(conta)
 
 
 class CadastrarUseCase(UseCase):
@@ -70,10 +73,10 @@ class EntrarUseCase(UseCase):
 
     def execute(self, input: EntrarInput) -> ContaOutput:
         match input.query:
-            case Email():
-                conta = self.repository.get_by_email(input.query)
-            case Username():
-                conta = self.repository.get_by_username(input.query)
+            case Email() as email:
+                conta = self.repository.get_by_email(email)
+            case Username() as username:
+                conta = self.repository.get_by_username(username)
 
         if conta is None:
             raise ContaNaoEncontradaError()
