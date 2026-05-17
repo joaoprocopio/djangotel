@@ -1,32 +1,21 @@
-from typing import TYPE_CHECKING
-
 import pytest
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from model_bakery import baker
 
-if TYPE_CHECKING:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
+from rastro.conta.models import Conta
 
 
 @pytest.fixture
-def user(db: None) -> User:
-    username = "username"
-    password = "password"
-
-    user = baker.make(
-        User,
-        username=username,
-        first_name="Test",
-        last_name="User",
-        email=f"{username}@email.com",
+def conta(db: None) -> Conta:
+    conta = baker.make(
+        Conta,
+        display_name="Test User",
+        email="testuser@email.com",
     )
-    user.set_password(password)
-    user.save()
+    conta.set_password("password")
+    conta.save()
 
-    return user
+    return conta
 
 
 @pytest.fixture

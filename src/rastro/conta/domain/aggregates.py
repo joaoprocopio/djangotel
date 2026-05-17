@@ -3,10 +3,10 @@ from typing import Optional
 
 from rastro.conta.domain.services import PasswordHashingService, PasswordVerification
 from rastro.conta.domain.value_objects import (
+    DisplayName,
     Email,
     HashedPassword,
     RawPassword,
-    Username,
 )
 from rastro_base.aggregate import AggregateRoot
 from rastro_shared_kernel.value_objects import Id
@@ -14,11 +14,9 @@ from rastro_shared_kernel.value_objects import Id
 
 class Conta(AggregateRoot):
     id: Id
-    username: Username
     email: Email
     password: HashedPassword
-    first_name: str
-    last_name: str
+    display_name: DisplayName
     date_joined: datetime
     last_login: Optional[datetime]
     is_active: bool

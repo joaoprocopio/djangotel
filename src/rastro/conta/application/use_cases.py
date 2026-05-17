@@ -11,10 +11,6 @@ from rastro.conta.domain.errors import (
 )
 from rastro.conta.domain.repository import ContaRepository
 from rastro.conta.domain.services import PasswordHashingService, SessionService
-from rastro.conta.domain.value_objects import (
-    Email,
-    Username,
-)
 from rastro.conta.shared.mappers import OutputContaMapper
 from rastro_base.use_case import UseCase
 
@@ -50,7 +46,7 @@ class CadastrarUseCase(UseCase):
         hashed_password = self.password_hashing_service.hash(input.password)
 
         conta = self.repository.create(
-            username=input.username,
+            display_name=input.display_name,
             email=input.email,
             hashed_password=hashed_password,
         )
@@ -72,11 +68,7 @@ class EntrarUseCase(UseCase):
         self.password_hashing_service = password_hashing_service
 
     def execute(self, input: EntrarInput) -> ContaOutput:
-        match input.query:
-            case Email() as email:
-                conta = self.repository.get_by_email(email)
-            case Username() as username:
-                conta = self.repository.get_by_username(username)
+        conta = self.repository.get_by_email(input.email)
 
         if conta is None:
             raise ContaNaoEncontradaError()

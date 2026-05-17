@@ -1,29 +1,19 @@
-from typing import TYPE_CHECKING
-
-from django.contrib.auth import get_user_model
-
 from rastro.conta.application.dtos import ContaOutput, ContaPublic
 from rastro.conta.domain.aggregates import Conta
-from rastro.conta.domain.value_objects import Email, HashedPassword, Username
+from rastro.conta.domain.value_objects import DisplayName, Email, HashedPassword
+from rastro.conta.models import Conta as ContaModel
 from rastro_base.mapper import Mapper
 from rastro_shared_kernel.value_objects import Id
 
-if TYPE_CHECKING:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
 
-
-class HydrateContaMapper(Mapper[User, Conta]):
+class HydrateContaMapper(Mapper[ContaModel, Conta]):
     @staticmethod
-    def map(conta: User) -> Conta:
+    def map(conta: ContaModel) -> Conta:
         return Conta(
             id=Id(conta.pk),
-            username=Username(conta.username),
             email=Email(conta.email),
             password=HashedPassword(conta.password),
-            first_name=conta.first_name,
-            last_name=conta.last_name,
+            display_name=DisplayName(conta.display_name),
             date_joined=conta.date_joined,
             last_login=conta.last_login,
             is_superuser=conta.is_superuser,
@@ -32,16 +22,14 @@ class HydrateContaMapper(Mapper[User, Conta]):
         )
 
 
-class DehydrateContaMapper(Mapper[Conta, User]):
+class DehydrateContaMapper(Mapper[Conta, ContaModel]):
     @staticmethod
-    def map(conta: Conta) -> User:
-        return User(
+    def map(conta: Conta) -> ContaModel:
+        return ContaModel(
             id=conta.id.root,
-            username=conta.username.root,
             email=conta.email.root,
             password=conta.password.root,
-            first_name=conta.first_name,
-            last_name=conta.last_name,
+            display_name=conta.display_name.root,
             date_joined=conta.date_joined,
             last_login=conta.last_login,
             is_superuser=conta.is_superuser,
@@ -56,13 +44,13 @@ class PresentContaMapper(Mapper[Conta | ContaOutput, ContaPublic]):
         match source:
             case Conta():
                 return ContaPublic(
+                    display_name=source.display_name,
                     email=source.email,
-                    username=source.username,
                 )
             case ContaOutput():
                 return ContaPublic(
+                    display_name=source.display_name,
                     email=source.email,
-                    username=source.username,
                 )
 
 
@@ -71,11 +59,9 @@ class OutputContaMapper(Mapper[Conta, ContaOutput]):
     def map(source: Conta) -> ContaOutput:
         return ContaOutput(
             id=source.id,
-            username=source.username,
             email=source.email,
             password=source.password,
-            first_name=source.first_name,
-            last_name=source.last_name,
+            display_name=source.display_name,
             date_joined=source.date_joined,
             last_login=source.last_login,
             is_superuser=source.is_superuser,

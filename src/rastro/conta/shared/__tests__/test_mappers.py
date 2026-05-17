@@ -1,8 +1,5 @@
-from typing import TYPE_CHECKING
-
-from django.contrib.auth import get_user_model
-
-from rastro.conta.domain.value_objects import Email, Username
+from rastro.conta.domain.value_objects import DisplayName, Email, HashedPassword
+from rastro.conta.models import Conta as ContaModel
 from rastro.conta.shared.mappers import (
     DehydrateContaMapper,
     HydrateContaMapper,
@@ -10,67 +7,57 @@ from rastro.conta.shared.mappers import (
     PresentContaMapper,
 )
 
-if TYPE_CHECKING:
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
+
+def test_hydrate_conta(conta: ContaModel) -> None:
+    hydrated_conta = HydrateContaMapper.map(conta)
+
+    assert hydrated_conta.display_name == DisplayName(conta.display_name)
+    assert hydrated_conta.email == Email(conta.email)
+    assert hydrated_conta.password == HashedPassword(conta.password)
+    assert hydrated_conta.date_joined == conta.date_joined
+    assert hydrated_conta.last_login == conta.last_login
+    assert hydrated_conta.is_active == conta.is_active
+    assert hydrated_conta.is_staff == conta.is_staff
+    assert hydrated_conta.is_superuser == conta.is_superuser
 
 
-def test_hydrate_conta(user: User) -> None:
-    conta = HydrateContaMapper.map(user)
+def test_dehydrate_conta(conta: ContaModel) -> None:
+    dehydrated_conta = DehydrateContaMapper.map(HydrateContaMapper.map(conta))
 
-    assert conta.username == Username(user.username)
-    assert conta.email == Email(user.email)
-    assert conta.first_name == user.first_name
-    assert conta.last_name == user.last_name
-    assert conta.date_joined == user.date_joined
-    assert conta.last_login == user.last_login
-    assert conta.is_active == user.is_active
-    assert conta.is_staff == user.is_staff
-    assert conta.is_superuser == user.is_superuser
-
-
-def test_dehydrate_conta(user: User) -> None:
-    conta = DehydrateContaMapper.map(HydrateContaMapper.map(user))
-
-    assert conta.username == user.username
-    assert conta.email == user.email
-    assert conta.first_name == user.first_name
-    assert conta.last_name == user.last_name
-    assert conta.date_joined == user.date_joined
-    assert conta.last_login == user.last_login
-    assert conta.is_active == user.is_active
-    assert conta.is_staff == user.is_staff
-    assert conta.is_superuser == user.is_superuser
+    assert dehydrated_conta.email == conta.email
+    assert dehydrated_conta.display_name == conta.display_name
+    assert dehydrated_conta.password == conta.password
+    assert dehydrated_conta.date_joined == conta.date_joined
+    assert dehydrated_conta.last_login == conta.last_login
+    assert dehydrated_conta.is_active == conta.is_active
+    assert dehydrated_conta.is_staff == conta.is_staff
+    assert dehydrated_conta.is_superuser == conta.is_superuser
 
 
-def test_preset_conta_from_domain(user: User) -> None:
-    conta = HydrateContaMapper.map(user)
-    conta_public = PresentContaMapper.map(conta)
+def test_preset_conta_from_domain(conta: ContaModel) -> None:
+    public_conta = PresentContaMapper.map(HydrateContaMapper.map(conta))
 
-    assert conta.email == conta_public.email
-    assert conta.username == conta_public.username
-
-
-def test_preset_conta_from_output(user: User) -> None:
-    conta = HydrateContaMapper.map(user)
-    conta_output = OutputContaMapper.map(conta)
-    conta_public = PresentContaMapper.map(conta_output)
-
-    assert conta.email == conta_public.email
-    assert conta.username == conta_public.username
+    assert public_conta.email == Email(conta.email)
+    assert public_conta.display_name == DisplayName(conta.display_name)
 
 
-def test_output_conta(user: User) -> None:
-    conta = HydrateContaMapper.map(user)
-    conta_output = OutputContaMapper.map(conta)
+def test_preset_conta_from_output(conta: ContaModel) -> None:
+    public_conta = PresentContaMapper.map(
+        OutputContaMapper.map(HydrateContaMapper.map(conta))
+    )
 
-    assert conta.username == conta_output.username
-    assert conta.email == conta_output.email
-    assert conta.first_name == conta_output.first_name
-    assert conta.last_name == conta_output.last_name
-    assert conta.date_joined == conta_output.date_joined
-    assert conta.last_login == conta_output.last_login
-    assert conta.is_active == conta_output.is_active
-    assert conta.is_staff == conta_output.is_staff
-    assert conta.is_superuser == conta_output.is_superuser
+    assert public_conta.email == Email(conta.email)
+    assert public_conta.display_name == DisplayName(conta.display_name)
+
+
+def test_output_conta(conta: ContaModel) -> None:
+    output_conta = OutputContaMapper.map(HydrateContaMapper.map(conta))
+
+    assert output_conta.email == Email(conta.email)
+    assert output_conta.display_name == DisplayName(conta.display_name)
+    assert output_conta.password == HashedPassword(conta.password)
+    assert output_conta.date_joined == conta.date_joined
+    assert output_conta.last_login == conta.last_login
+    assert output_conta.is_active == conta.is_active
+    assert output_conta.is_staff == conta.is_staff
+    assert output_conta.is_superuser == conta.is_superuser

@@ -1,14 +1,12 @@
 import re
-import unicodedata
 from typing import Annotated
 
-from pydantic import AfterValidator, StringConstraints
+from pydantic import StringConstraints
 
 from rastro_base.value_object import RootValueObject
 
 # https://emailregex.com/
 EMAIL_PATTERN = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
-UNICODE_USERNAME_PATTERN = re.compile(r"^[\w.@+-]+\Z")
 
 
 class Email(
@@ -22,12 +20,11 @@ class Email(
     pass
 
 
-class Username(
+class DisplayName(
     RootValueObject[
         Annotated[
             str,
-            AfterValidator(lambda val: unicodedata.normalize("NFKC", val)),
-            StringConstraints(pattern=UNICODE_USERNAME_PATTERN),
+            StringConstraints(max_length=320),
         ]
     ]
 ):
